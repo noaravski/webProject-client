@@ -41,7 +41,7 @@ function App() {
               >
                 <div className="align-items-center">
                   <img src={google} alt="logo" className="icon" />
-                  Sign In with Google
+                  Log In with Google
                 </div>
               </MDBBtn>
 
