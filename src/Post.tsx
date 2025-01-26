@@ -17,6 +17,7 @@ import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
+import Rating from "@mui/material/Rating";
 
 interface PostProps {
   username: string;
@@ -101,6 +102,7 @@ export default function Post({ username, title, content, likes }: PostProps) {
           <IconButton variant="plain" color="neutral" size="sm">
             <ModeCommentOutlined />
           </IconButton>
+          <Rating name="size-large" defaultValue={3} size="large" />
         </Box>
         <Box
           sx={{ width: 0, display: "flex", flexDirection: "row-reverse" }}
