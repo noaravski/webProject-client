@@ -14,10 +14,10 @@ import {
 } from "mdb-react-ui-kit";
 import logo from "./assets/popcorn.png";
 import Stars from "./buttons/Stars";
+import Post from "./Post";
 // import CommentsSection from "./buttons/CommentsSection";
 // import Feed from "./Feed";
 // import Like from "./buttons/Like";
-
 const ScrollableCards = () => {
   const cardsData = [
     {
@@ -81,36 +81,36 @@ const ScrollableCards = () => {
         {/* <Feed></Feed> */}
 
         {cardsData.map((card) => (
-          <MDBCard
-            style={{
-              width: "100%",
-              maxWidth: "800px",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-            }}
-            key={card.id}
-          >
-            <MDBCardImage
-              src={card.image}
-              alt={card.title}
-              position="top"
-              style={{ borderRadius: "0" }}
-            />
-            <MDBCardBody>
-              <MDBCardTitle>{card.title}</MDBCardTitle>
-              <MDBCardText>{card.text}</MDBCardText>
-              <div
-                style={{
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: "1rem",
-                }}
-              >
-                {/* <Like></Like> */}
-                <Stars></Stars>
-                {/* <CommentsSection></CommentsSection> */}
-              </div>
-            </MDBCardBody>
-          </MDBCard>
+          <Post username="idan" title={card.title} content={card.text}></Post>
+          // <MDBCard
+          //   style={{
+          //     width: "100%",
+          //     maxWidth: "800px",
+          //     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+          //   }}
+          //   key={card.id}
+          // >
+          //   <MDBCardImage
+          //     src={card.image}
+          //     alt={card.title}
+          //     position="top"
+          //   />
+          //   <MDBCardBody>
+          //     <MDBCardTitle>{card.title}</MDBCardTitle>
+          //     <MDBCardText>{card.text}</MDBCardText>
+          //     <div
+          //       style={{
+          //         justifyContent: "space-between",
+          //         alignItems: "center",
+          //         marginTop: "1rem",
+          //       }}
+          //     >
+          //       {/* <Like></Like> */}
+          //       <Stars></Stars>
+          //       {/* <CommentsSection></CommentsSection> */}
+          //     </div>
+          //   </MDBCardBody>
+          // </MDBCard>
         ))}
       </div>
     </div>

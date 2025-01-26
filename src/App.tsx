@@ -6,8 +6,8 @@ function App() {
   return (
     <>
     {/* <SignUp></SignUp> */}
-      <Login></Login>
-      {/* <ScrollableCards></ScrollableCards> */}
+      {/* <Login></Login> */}
+      <ScrollableCards></ScrollableCards>
     </>
   );
 }
