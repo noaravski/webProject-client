@@ -12,6 +12,7 @@ import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
@@ -21,10 +22,12 @@ interface PostProps {
   username: string;
   title: string;
   content: string;
-  publishDate: Date,
+  publishDate: Date;
+  likes: number;
 }
 
-export default function Post({ username, title, content }: PostProps) {
+export default function Post({ username, title, content, likes }: PostProps) {
+  const [liked, setLiked] = React.useState(0);
   return (
     <Card
       variant="outlined"
@@ -53,19 +56,14 @@ export default function Post({ username, title, content }: PostProps) {
         >
           <Avatar
             size="sm"
-            src="/static/logo.png"
-            sx={{ p: 0.5, border: "2px solid", borderColor: "background.body" }}
+            src="https://i.pravatar.cc/30"
+            sx={{
+              border: "2px solid",
+              borderColor: "background.body",
+            }}
           />
         </Box>
         <Typography sx={{ fontWeight: "lg" }}>{username}</Typography>
-        <IconButton
-          variant="plain"
-          color="neutral"
-          size="sm"
-          sx={{ ml: "auto" }}
-        >
-          <MoreHoriz />
-        </IconButton>
       </CardContent>
       <CardOverflow>
         <AspectRatio>
@@ -81,40 +79,32 @@ export default function Post({ username, title, content }: PostProps) {
         sx={{ alignItems: "center", mx: -1 }}
       >
         <Box sx={{ width: 0, display: "flex", gap: 0.5 }}>
-          <IconButton variant="plain" color="neutral" size="sm">
-            <FavoriteBorder />
-          </IconButton>
+          {liked == 0 ? (
+            <IconButton
+              variant="plain"
+              color="neutral"
+              size="sm"
+              onClick={() => setLiked(1)}
+            >
+              <FavoriteBorder />
+            </IconButton>
+          ) : (
+            <IconButton
+              variant="plain"
+              color="danger"
+              size="sm"
+              onClick={() => setLiked(0)}
+            >
+              <FavoriteIcon />
+            </IconButton>
+          )}
           <IconButton variant="plain" color="neutral" size="sm">
             <ModeCommentOutlined />
           </IconButton>
-          <IconButton variant="plain" color="neutral" size="sm">
-            <SendOutlined />
-          </IconButton>
         </Box>
         <Box
-          sx={{ display: "flex", alignItems: "center", gap: 0.5, mx: "auto" }}
-        >
-          {[...Array(5)].map((_, index) => (
-            <Box
-              key={index}
-              sx={[
-                {
-                  borderRadius: "50%",
-                  width: `max(${6 - index}px, 3px)`,
-                  height: `max(${6 - index}px, 3px)`,
-                },
-                index === 0
-                  ? { bgcolor: "primary.solidBg" }
-                  : { bgcolor: "background.level3" },
-              ]}
-            />
-          ))}
-        </Box>
-        <Box sx={{ width: 0, display: "flex", flexDirection: "row-reverse" }}>
-          <IconButton variant="plain" color="neutral" size="sm">
-            <BookmarkBorderRoundedIcon />
-          </IconButton>
-        </Box>
+          sx={{ width: 0, display: "flex", flexDirection: "row-reverse" }}
+        ></Box>
       </CardContent>
       <CardContent>
         <Link
@@ -123,7 +113,7 @@ export default function Post({ username, title, content }: PostProps) {
           textColor="text.primary"
           sx={{ fontSize: "sm", fontWeight: "lg" }}
         >
-          8.1M Likes
+          {likes} likes
         </Link>
         <Typography sx={{ fontSize: "sm", textAlign: "left" }}>
           <Link
@@ -132,7 +122,7 @@ export default function Post({ username, title, content }: PostProps) {
             textColor="text.primary"
             sx={{ fontWeight: "lg" }}
           >
-            MUI
+            {username}
           </Link>{" "}
           {content}
         </Typography>
@@ -153,9 +143,6 @@ export default function Post({ username, title, content }: PostProps) {
         </Link>
       </CardContent>
       <CardContent orientation="horizontal" sx={{ gap: 1 }}>
-        <IconButton size="sm" variant="plain" color="neutral" sx={{ ml: -1 }}>
-          <Face />
-        </IconButton>
         <Input
           variant="plain"
           size="sm"

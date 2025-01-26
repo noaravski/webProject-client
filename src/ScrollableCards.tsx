@@ -81,7 +81,12 @@ const ScrollableCards = () => {
         {/* <Feed></Feed> */}
 
         {cardsData.map((card) => (
-          <Post username="idan" title={card.title} content={card.text}></Post>
+          <Post
+            username="idan"
+            title={card.title}
+            content={card.text}
+            likes={Math.floor(Math.random() * 100)}
+          ></Post>
           // <MDBCard
           //   style={{
           //     width: "100%",
