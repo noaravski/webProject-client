@@ -59,10 +59,10 @@ export const logout = async () => {
   removeAuthTokens();
 };
 
-export const googleSignin = async (credential?: string) => {
+export const googleLogin = async (credential?: string) => {
   const tokens = (
     await axios.post<ILoginResponse>(
-      "http://localhost:3000/api/auth/login/google",
+      "http://localhost:3000/user/login/google",
       {
         credential,
       }
@@ -73,4 +73,4 @@ export const googleSignin = async (credential?: string) => {
   console.log("after server valid", tokens);
 };
 
-export default { register, login, logout, googleSignin };
+export default { register, login, logout, googleLogin };

@@ -13,7 +13,7 @@ import movie from "./assets/movie.png";
 import logo from "./assets/logo.png";
 import google from "./assets/google.png";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { login } from "./services/userService";
+import { login , googleLogin } from "./services/userService";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -25,7 +25,7 @@ type LoginData = {
 
 function Login() {
   const googleResponseMessage = (credentialResponse: CredentialResponse) => {
-    console.log("Google response", credentialResponse);
+    googleLogin(credentialResponse.credential);
   };
 
   const googleErrorMessage = () => {
@@ -39,7 +39,8 @@ function Login() {
 
   const { register, handleSubmit } = useForm<LoginData>({});
   const navigate = useNavigate();
-
+  
+  
   return (
     <MDBContainer className="my-5">
       <MDBCard style={{ maxWidth: "500vw" }}>
@@ -58,24 +59,27 @@ function Login() {
                 <img src={logo} alt="logo" className="logo" />
                 <span className="h1 fw-bold">MovieRator</span>
               </div>
-              <GoogleLogin
-                onSuccess={googleResponseMessage}
-                onError={googleErrorMessage}
-              >
-                <MDBBtn
-                  className="mb-4"
-                  color="dark"
-                  size="sm"
-                  style={{ padding: "0px" }}
+              <div className="d-flex justify-content-center align-items-center">
+                <GoogleLogin
+                width={300}
+                  onSuccess={googleResponseMessage}
+                  onError={googleErrorMessage}
                 >
-                  <div className="align-items-center">
-                    <img src={google} alt="logo" className="icon" />
-                    Log In with Google
-                  </div>
-                </MDBBtn>
-              </GoogleLogin>
+                  <MDBBtn
+                    className="mb-4"
+                    color="dark"
+                    size="sm"
+                    style={{ padding: "0px" }}
+                  >
+                    <div className="align-items-center">
+                      <img src={google} alt="logo" className="icon" />
+                      Log In with Google
+                    </div>
+                  </MDBBtn>
+                </GoogleLogin>
+              </div>
 
-              <div className="divider d-flex align-items-center mb-4">
+              <div className="divider d-flex align-items-center mb-4 mt-2">
                 <p className="text-center fw-bold mx-3 mt-0 mb-0">OR</p>
               </div>
               <form onSubmit={handleSubmit(onSubmit)}>
