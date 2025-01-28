@@ -13,6 +13,7 @@ export const removeAuthTokens = () => {
   localStorage.removeItem(refreshTokenName);
 };
 
+
 export const getAuthTokenByName = (tokenName: string) => {
   return localStorage.getItem(tokenName);
 };

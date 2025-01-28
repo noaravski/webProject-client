@@ -5,6 +5,7 @@ import {
   refreshTokenName,
   removeAuthTokens,
 } from "../utils/localStorage";
+import { useNavigate } from "react-router-dom";
 
 export { CanceledError };
 
@@ -35,14 +36,20 @@ export const register = async (
 };
 
 export const login = async (email: string, password: string) => {
-  const data = (
-    await axios.post<ILoginResponse>("http://localhost:3000/user/login", {
-      email,
-      password,
-    })
-  ).data;
-
-  updateTokens(data);
+  try{
+    const data = (
+      await axios.post<ILoginResponse>("http://localhost:3000/user/login", {
+        email,
+        password,
+      })
+    ).data;
+  
+    updateTokens(data);
+    return true 
+  }catch(e){
+    console.log(e);
+    return false;
+  }
 };
 
 export const logout = async () => {
@@ -59,10 +66,10 @@ export const logout = async () => {
   removeAuthTokens();
 };
 
-export const googleSignin = async (credential?: string) => {
+export const googleLogin = async (credential?: string) => {
   const tokens = (
     await axios.post<ILoginResponse>(
-      "http://localhost:3000/api/auth/login/google",
+      "http://localhost:3000/user/login/google",
       {
         credential,
       }
@@ -73,4 +80,4 @@ export const googleSignin = async (credential?: string) => {
   console.log("after server valid", tokens);
 };
 
-export default { register, login, logout, googleSignin };
+export default { register, login, logout, googleLogin };

@@ -12,7 +12,8 @@ import {
 import movie from "./assets/movie.png";
 import logo from "./assets/logo.png";
 import google from "./assets/google.png";
-import { register as registerUser } from "./services/userService";
+import { register as registerUser, googleLogin } from "./services/userService";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useForm } from "react-hook-form";
 
 type RegisterData = {
@@ -23,6 +24,14 @@ type RegisterData = {
 };
 
 function SignUp() {
+  const googleResponseMessage = (credentialResponse: CredentialResponse) => {
+    googleLogin(credentialResponse.credential);
+  };
+
+  const googleErrorMessage = () => {
+    console.error("Google error");
+  };
+
   const onSubmit = async (data: RegisterData) => {
     const { email, firstName, lastName, password } = data;
     console.log("data", data);
@@ -50,19 +59,27 @@ function SignUp() {
                 <img src={logo} alt="logo" className="logo" />
                 <span className="h1 fw-bold">MovieRator</span>
               </div>
-              <MDBBtn
-                className="mb-4"
-                color="dark"
-                size="sm"
-                style={{ padding: "0px" }}
-              >
-                <div className="align-items-center">
-                  <img src={google} alt="logo" className="icon" />
-                  Sign Up with Google
-                </div>
-              </MDBBtn>
+              <div className="d-flex justify-content-center align-items-center">
+                <GoogleLogin
+                  width={300}
+                  onSuccess={googleResponseMessage}
+                  onError={googleErrorMessage}
+                >
+                  <MDBBtn
+                    className="mb-4"
+                    color="dark"
+                    size="sm"
+                    style={{ padding: "0px" }}
+                  >
+                    <div className="align-items-center">
+                      <img src={google} alt="logo" className="icon" />
+                      Sign Up with Google
+                    </div>
+                  </MDBBtn>
+                </GoogleLogin>
+              </div>
 
-              <div className="divider d-flex align-items-center mb-4">
+              <div className="divider d-flex align-items-center mb-4 mt-2">
                 <p className="text-center fw-bold mx-3 mt-0 mb-0">OR</p>
               </div>
               <form onSubmit={handleSubmit(onSubmit)}>
