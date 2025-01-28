@@ -1,0 +1,18 @@
+body {
+  /* background: linear-gradient(to bottom, #202e45, #2e343f); */
+  /* background-attachment: fixed; */
+  /* background-color: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); */
+  background: lightgray;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: auto;
+  width: auto;
+}
+
+.divider:after,
+.divider:before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}

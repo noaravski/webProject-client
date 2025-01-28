@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from "react";
 import AspectRatio from "@mui/joy/AspectRatio";
 import CardOverflow from "@mui/joy/CardOverflow";
@@ -10,14 +9,11 @@ import Link from "@mui/joy/Link";
 import IconButton from "@mui/joy/IconButton";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
-import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
-import SendOutlined from "@mui/icons-material/SendOutlined";
-import Face from "@mui/icons-material/Face";
-import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import Rating from "@mui/material/Rating";
+import { backdropClasses } from "@mui/material";
 
 interface PostProps {
   username: string;
@@ -32,7 +28,7 @@ export default function Post({ username, title, content, likes }: PostProps) {
   return (
     <Card
       variant="outlined"
-      sx={{ width: 500, "--Card-radius": (theme) => theme.vars.radius.xs }}
+      sx={{ width: 500, borderRadius: "lg", my: 2, mx: "auto" }}
     >
       <CardContent
         orientation="horizontal"

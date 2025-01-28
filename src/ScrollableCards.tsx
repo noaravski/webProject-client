@@ -1,14 +1,21 @@
+import "./Home.css";
 import { MDBNavbar, MDBNavbarBrand, MDBContainer } from "mdb-react-ui-kit";
 import logo from "./assets/popcorn.png";
 import Post from "./Post";
 import { getPosts } from "./services/postService";
 import { useEffect, useState } from "react";
 import { IPostResponse } from "./services/postService";
+import { useNavigate } from "react-router-dom";
 
 const ScrollableCards = () => {
   const [cardsData, setCardsData] = useState<IPostResponse[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!localStorage.getItem("accessToken")) {
+      navigate("/login");
+    }
+
     const fetchPosts = async () => {
       const posts = await getPosts();
       setCardsData(posts);
@@ -21,7 +28,6 @@ const ScrollableCards = () => {
       <MDBNavbar dark bgColor="dark" fixed="top">
         <MDBContainer fluid>
           <MDBNavbarBrand href="#profile" className="text-white">
-            {/* <MDBIcon fas icon="film" className="me-2" /> */}
             <img
               src={logo}
               alt="logo"
@@ -36,19 +42,20 @@ const ScrollableCards = () => {
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
+          flexWrap: "wrap",
           alignItems: "center",
           padding: "2rem",
           gap: "2rem",
         }}
       >
-        {/* <Feed></Feed> */}
-
         {cardsData.map((card) => (
           <Post
+            key={card.title}
             username={card.sender}
             content={card.content}
             likes={Math.floor(Math.random() * 100)}
+            style={{ flexBasis: "calc(33.33%)" }}
           ></Post>
         ))}
       </div>
