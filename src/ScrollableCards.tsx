@@ -55,7 +55,6 @@ const ScrollableCards = () => {
             username={card.sender}
             content={card.content}
             likes={Math.floor(Math.random() * 100)}
-            style={{ flexBasis: "calc(33.33%)" }}
           ></Post>
         ))}
       </div>
