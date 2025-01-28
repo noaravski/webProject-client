@@ -3,12 +3,14 @@ import { MDBNavbar, MDBNavbarBrand, MDBContainer } from "mdb-react-ui-kit";
 import logo from "./assets/popcorn.png";
 import Post from "./Post";
 import { getPosts } from "./services/postService";
+import { getCommentsByPost } from "./services/commentService";
 import { useEffect, useState } from "react";
-import { IPostResponse } from "./services/postService";
+// import { IPostResponse } from "./services/postService";
 import { useNavigate } from "react-router-dom";
+import { IPostWithComments } from "./services/postService";
 
 const ScrollableCards = () => {
-  const [cardsData, setCardsData] = useState<IPostResponse[]>([]);
+  const [cardsData, setCardsData] = useState<IPostWithComments[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,7 +20,19 @@ const ScrollableCards = () => {
 
     const fetchPosts = async () => {
       const posts = await getPosts();
-      setCardsData(posts);
+      const postsWithComments: IPostWithComments[] = [];
+
+      for (const post of posts) {
+        const comments = await getCommentsByPost(post._id);
+        const postWithComments: IPostWithComments = {
+          ...post,
+          comments: comments,
+        };
+
+        postsWithComments.push(postWithComments);
+      }
+      console.log(postsWithComments);
+      setCardsData(postsWithComments);
     };
     fetchPosts();
   }, []);
@@ -54,6 +68,7 @@ const ScrollableCards = () => {
             key={card.title}
             username={card.sender}
             content={card.content}
+            comments={card.comments}
             likes={Math.floor(Math.random() * 100)}
           ></Post>
         ))}

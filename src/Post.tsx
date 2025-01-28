@@ -14,6 +14,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import Rating from "@mui/material/Rating";
 import { backdropClasses } from "@mui/material";
+import { ICommentResponse } from "./services/commentService";
 
 interface PostProps {
   username: string;
@@ -23,7 +24,13 @@ interface PostProps {
   likes: number;
 }
 
-export default function Post({ username, title, content, likes }: PostProps) {
+export default function Post({
+  username,
+  title,
+  content,
+  likes,
+  comments,
+}: PostProps) {
   const [liked, setLiked] = React.useState(0);
   return (
     <Card
@@ -124,21 +131,31 @@ export default function Post({ username, title, content, likes }: PostProps) {
           </Link>{" "}
           {content}
         </Typography>
+        {comments.map((comment: ICommentResponse) => (
+          <Typography sx={{ fontSize: "sm", textAlign: "left" }}>
+            <Box component="span" sx={{ fontWeight: "bold" }}>
+              {`${comment.sender}: `}
+            </Box>
+            {`${comment.content}`}
+          </Typography>
+        ))}
         <Link
           component="button"
           underline="none"
-          startDecorator="…"
           sx={{ fontSize: "sm", color: "text.tertiary" }}
         >
           more
         </Link>
-        <Link
-          component="button"
-          underline="none"
-          sx={{ fontSize: "10px", color: "text.tertiary", my: 0.5 }}
+        <Typography
+          sx={{
+            fontSize: "10px",
+            color: "text.tertiary",
+            my: 0.5,
+            textAlign: "left",
+          }}
         >
           2 DAYS AGO
-        </Link>
+        </Typography>
       </CardContent>
       <CardContent orientation="horizontal" sx={{ gap: 1 }}>
         <Input
