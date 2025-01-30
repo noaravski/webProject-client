@@ -15,6 +15,7 @@ import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import Rating from "@mui/material/Rating";
 import { backdropClasses } from "@mui/material";
 import { ICommentResponse } from "./services/commentService";
+import CommentsModal from "./modals/commentsModal";
 
 interface PostProps {
   username: string;
@@ -22,6 +23,7 @@ interface PostProps {
   content: string;
   publishDate: Date;
   likes: number;
+  comments: ICommentResponse[];
 }
 
 export default function Post({
@@ -32,6 +34,11 @@ export default function Post({
   comments,
 }: PostProps) {
   const [liked, setLiked] = React.useState(0);
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  const openComments = () => setIsOpen(true);
+  const closeComments = () => setIsOpen(false);
+
   return (
     <Card
       variant="outlined"
@@ -67,7 +74,9 @@ export default function Post({
             }}
           />
         </Box>
-        <Typography sx={{ fontWeight: "lg" }}>{username}</Typography>
+        <Typography sx={{ fontWeight: "lg", textDecoration: "none" }}>
+          {username}
+        </Typography>
       </CardContent>
       <CardOverflow>
         <AspectRatio>
@@ -131,21 +140,34 @@ export default function Post({
           </Link>{" "}
           {content}
         </Typography>
-        {comments.map((comment: ICommentResponse) => (
-          <Typography sx={{ fontSize: "sm", textAlign: "left" }}>
-            <Box component="span" sx={{ fontWeight: "bold" }}>
-              {`${comment.sender}: `}
-            </Box>
-            {`${comment.content}`}
+        {comments.length > 2 ? (
+          <Typography
+            onClick={openComments}
+            sx={{
+              fontSize: "sm",
+              color: "text.tertiary",
+              my: 0.5,
+              textAlign: "left",
+            }}
+          >
+            {/* <CommentsModal open={open}></CommentsModal> */}
+            <Link underline="none" sx={{ color: "text.tertiary" }}>
+              {comments.length} comments
+              {/* <CommentsModal open={openComments} handleClose={close}></CommentsModal> */}
+            </Link>
           </Typography>
-        ))}
-        <Link
-          component="button"
-          underline="none"
-          sx={{ fontSize: "sm", color: "text.tertiary" }}
-        >
-          more
-        </Link>
+        ) : (
+          comments.map((comment: ICommentResponse) => (
+            <div key={comment._id}>
+              <Typography sx={{ fontSize: "sm", textAlign: "left" }}>
+                <Box component="span" sx={{ fontWeight: "bold" }}>
+                  {`${comment.sender}: `}
+                </Box>
+                {`${comment.content}`}
+              </Typography>
+            </div>
+          ))
+        )}
         <Typography
           sx={{
             fontSize: "10px",
@@ -168,6 +190,11 @@ export default function Post({
           Post
         </Link>
       </CardContent>
+      <CommentsModal
+        isOpen={isOpen}
+        onClose={closeComments}
+        comments={comments}
+      />
     </Card>
   );
 }
