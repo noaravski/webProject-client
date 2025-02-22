@@ -25,8 +25,16 @@ type LoginData = {
 function Login() {
   const navigate = useNavigate();
 
-  const googleResponseMessage = (credentialResponse: CredentialResponse) => {
-    googleLogin(credentialResponse.credential);
+  const googleResponseMessage = async (
+    credentialResponse: CredentialResponse
+  ) => {
+    const loginSuccess = await googleLogin(credentialResponse.credential);
+
+    if (loginSuccess) {
+      navigate("/home");
+    } else {
+      console.error("Login failed");
+    }
   };
 
   const googleErrorMessage = () => {
@@ -69,6 +77,7 @@ function Login() {
                   width={300}
                   onSuccess={googleResponseMessage}
                   onError={googleErrorMessage}
+                  click_listener={() => googleResponseMessage}
                 >
                   <MDBBtn
                     className="mb-4"

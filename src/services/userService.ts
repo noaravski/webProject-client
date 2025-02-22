@@ -36,17 +36,17 @@ export const register = async (
 };
 
 export const login = async (email: string, password: string) => {
-  try{
+  try {
     const data = (
       await axios.post<ILoginResponse>("http://localhost:3000/user/login", {
         email,
         password,
       })
     ).data;
-  
+
     updateTokens(data);
-    return true 
-  }catch(e){
+    return true;
+  } catch (e) {
     console.log(e);
     return false;
   }
@@ -77,7 +77,7 @@ export const googleLogin = async (credential?: string) => {
   ).data;
 
   updateTokens(tokens);
-  console.log("after server valid", tokens);
+  return true;
 };
 
 export default { register, login, logout, googleLogin };
