@@ -9,11 +9,7 @@ import Link from "@mui/joy/Link";
 import IconButton from "@mui/joy/IconButton";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
-import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
-import Rating from "@mui/material/Rating";
-import { backdropClasses } from "@mui/material";
 import { ICommentResponse } from "./services/commentService";
 import CommentsModal from "./modals/commentsModal";
 import Likes from "./buttons/Like";
@@ -96,29 +92,9 @@ export default function Post({
       >
         <Box sx={{ width: 0, display: "flex", gap: 0.5 }}>
           <Likes postId={_id} />
-          {/* {liked == 0 ? (
-            <IconButton
-              variant="plain"
-              color="neutral"
-              size="sm"
-              onClick={() => setLiked(1)}
-            >
-              <FavoriteBorder />
-            </IconButton>
-          ) : (
-            <IconButton
-              variant="plain"
-              color="danger"
-              size="sm"
-              onClick={() => setLiked(0)}
-            >
-              <FavoriteIcon />
-            </IconButton>
-          )} */}
           <IconButton variant="plain" color="neutral" size="sm">
             <ModeCommentOutlined />
           </IconButton>
-          <Rating name="size-large" defaultValue={3} size="large" />
         </Box>
         <Box
           sx={{ width: 0, display: "flex", flexDirection: "row-reverse" }}
@@ -154,10 +130,8 @@ export default function Post({
               textAlign: "left",
             }}
           >
-            {/* <CommentsModal open={open}></CommentsModal> */}
             <Link underline="none" sx={{ color: "text.tertiary" }}>
               {comments.length} comments
-              {/* <CommentsModal open={openComments} handleClose={close}></CommentsModal> */}
             </Link>
           </Typography>
         ) : (
