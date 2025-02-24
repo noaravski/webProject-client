@@ -14,6 +14,7 @@ export interface IPostWithComments {
   content: string;
   sender: string;
   comments: ICommentResponse[];
+  likes: number;
 }
 
 export const getPosts = async () => {

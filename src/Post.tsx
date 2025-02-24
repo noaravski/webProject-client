@@ -16,6 +16,7 @@ import Rating from "@mui/material/Rating";
 import { backdropClasses } from "@mui/material";
 import { ICommentResponse } from "./services/commentService";
 import CommentsModal from "./modals/commentsModal";
+import Likes from "./buttons/Like";
 
 interface PostProps {
   username: string;
@@ -24,6 +25,7 @@ interface PostProps {
   publishDate: Date;
   likes: number;
   comments: ICommentResponse[];
+  _id: string;
 }
 
 export default function Post({
@@ -32,6 +34,7 @@ export default function Post({
   content,
   likes,
   comments,
+  _id,
 }: PostProps) {
   const [liked, setLiked] = React.useState(0);
   const [isOpen, setIsOpen] = React.useState(false);
@@ -92,7 +95,8 @@ export default function Post({
         sx={{ alignItems: "center", mx: -1 }}
       >
         <Box sx={{ width: 0, display: "flex", gap: 0.5 }}>
-          {liked == 0 ? (
+          <Likes postId={_id} />
+          {/* {liked == 0 ? (
             <IconButton
               variant="plain"
               color="neutral"
@@ -110,7 +114,7 @@ export default function Post({
             >
               <FavoriteIcon />
             </IconButton>
-          )}
+          )} */}
           <IconButton variant="plain" color="neutral" size="sm">
             <ModeCommentOutlined />
           </IconButton>

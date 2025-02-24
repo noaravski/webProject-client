@@ -69,7 +69,7 @@ const ScrollableCards = () => {
             username={card.sender}
             content={card.content}
             comments={card.comments}
-            likes={Math.floor(Math.random() * 100)}
+            likes={card.likes}
           ></Post>
         ))}
       </div>
