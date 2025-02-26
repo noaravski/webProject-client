@@ -11,7 +11,7 @@ import {
 } from "mdb-react-ui-kit";
 import "./Profile.css";
 import { useLocation } from "react-router-dom";
-import { getUserById } from "../../services/userService";
+import { getUserDetails } from "../../services/userService";
 import { IUser } from "../../interfaces/user";
 
 import EditProfileModal from "../EditProfile/EditProfile";
@@ -25,7 +25,7 @@ const Profile: React.FC = () => {
   const [user, setUser] = useState<IUser | null>(null);
 
   const fetchUser = async () => {
-    const userData = await getUserById(userId || "");
+    const userData = await getUserDetails();
     setUser(userData);
   };
 
