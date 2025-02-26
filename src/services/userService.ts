@@ -6,6 +6,7 @@ import {
   removeAuthTokens,
 } from "../utils/localStorage";
 import { useNavigate } from "react-router-dom";
+import { getAuthHeaders } from "./authClientService";
 
 export { CanceledError };
 
@@ -53,15 +54,10 @@ export const login = async (email: string, password: string) => {
 };
 
 export const logout = async () => {
-  const refreshToken = getAuthTokenByName(refreshTokenName);
   await axios.post<IRegisterResponse>(
     "http://localhost:3000/user/logout",
     {},
-    {
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-      },
-    }
+    getAuthHeaders()
   );
   removeAuthTokens();
 };

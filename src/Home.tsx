@@ -1,4 +1,4 @@
-import "./Home.css";
+import "./css/Home.css";
 import { MDBNavbar, MDBNavbarBrand, MDBContainer } from "mdb-react-ui-kit";
 import logo from "./assets/popcorn.png";
 import Post from "./Post";
@@ -30,14 +30,17 @@ const ScrollableCards = () => {
 
         postsWithComments.push(postWithComments);
       }
-      postsWithComments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      postsWithComments.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
       setCardsData(postsWithComments);
     };
     fetchPosts();
   }, []);
 
   return (
-    <div>
+    <div className="home">
       <MDBNavbar dark bgColor="dark" fixed="top">
         <MDBContainer fluid>
           <MDBNavbarBrand href="#profile" className="text-white">

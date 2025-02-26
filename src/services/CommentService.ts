@@ -6,6 +6,7 @@ import {
   refreshTokenName,
   removeAuthTokens,
 } from "../utils/localStorage";
+import { getAuthHeaders } from "./authClientService";
 export interface ICommentResponse {
   _id: "string";
   content: "string";
@@ -13,7 +14,6 @@ export interface ICommentResponse {
   sender: "string";
   createdAt: "string";
 }
-
 
 export const getCommentsByPost = async (postId) => {
   const response = await axios.get<ICommentResponse[]>(
@@ -23,10 +23,12 @@ export const getCommentsByPost = async (postId) => {
   return response.data;
 };
 
-export const createComment = async (postId: string, content: string, username:string) => {
+export const createComment = async (
+  postId: string,
+  content: string,
+  username: string
+) => {
   try {
-    const refreshToken = getAuthTokenByName(refreshTokenName);
-
     const response = await axios.post(
       `http://localhost:3000/add-comment`,
       {
@@ -34,11 +36,7 @@ export const createComment = async (postId: string, content: string, username:st
         content: content,
         sender: username,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      }
+      getAuthHeaders()
     );
     return response.data;
   } catch (error) {

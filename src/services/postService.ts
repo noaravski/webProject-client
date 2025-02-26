@@ -2,6 +2,7 @@ import axios from "axios";
 import type { ICommentResponse } from "./commentService";
 import { getAuthTokenByName } from "../utils/localStorage";
 import { refreshTokenName } from "../utils/localStorage";
+import { getAuthHeaders } from "./authClientService";
 export interface IPostResponse {
   _id: string;
   title: string;
@@ -24,42 +25,25 @@ export const getPosts = async () => {
 };
 
 export const addLike = async (postId: string) => {
-  const refreshToken = getAuthTokenByName(refreshTokenName);
   await axios.put(
     `http://localhost:3000/post/like/${postId}`,
     {},
-    {
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-      },
-    }
+    getAuthHeaders()
   );
 };
 
 export const removeLike = async (postId: string) => {
-  const refreshToken = getAuthTokenByName(refreshTokenName);
-
   await axios.put(
     `http://localhost:3000/post/unlike/${postId}`,
     {},
-    {
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-      },
-    }
+    getAuthHeaders()
   );
 };
 
 export const isLiked = async (postId: string) => {
-  const refreshToken = getAuthTokenByName(refreshTokenName);
-
   const response = await axios.get(
     `http://localhost:3000/post/isliked/${postId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-      },
-    }
+    getAuthHeaders()
   );
 
   return response.data.isLiked;
