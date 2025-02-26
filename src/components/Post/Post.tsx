@@ -26,7 +26,7 @@ interface PostProps {
   userId: string;
 }
 
-export default function Post({
+export default function NewPost({
   username,
   title,
   content,
