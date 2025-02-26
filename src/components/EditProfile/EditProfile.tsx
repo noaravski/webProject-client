@@ -29,12 +29,19 @@ type updatedUserData = {
   description: string;
 };
 
-const MDBInput = React.forwardRef<HTMLInputElement, React.ComponentProps<typeof OriginalMDBInput>>((props, ref) => (
-  <OriginalMDBInput {...props} ref={ref} />
-));
+const MDBInput = React.forwardRef<
+  HTMLInputElement,
+  React.ComponentProps<typeof OriginalMDBInput>
+>((props, ref) => <OriginalMDBInput {...props} ref={ref} />);
 
-const MDBTextArea = React.forwardRef<unknown, React.ComponentProps<typeof OriginalMDBTextArea>>((props, ref) => (
-  <OriginalMDBTextArea {...props} inputRef={ref as React.MutableRefObject<HTMLTextAreaElement>} />
+const MDBTextArea = React.forwardRef<
+  unknown,
+  React.ComponentProps<typeof OriginalMDBTextArea>
+>((props, ref) => (
+  <OriginalMDBTextArea
+    {...props}
+    inputRef={ref as React.MutableRefObject<HTMLTextAreaElement>}
+  />
 ));
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({
@@ -43,17 +50,30 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   user,
   onProfileUpdated,
 }) => {
-  const { register, handleSubmit } = useForm<updatedUserData>({});
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<updatedUserData>({});
 
   const onSubmit = async (data: updatedUserData) => {
     const { email, username, description } = data;
-    if (user?._id) {
-      await updateUser(user?._id, email, username, description);
-      onProfileUpdated();
-    } else {
-      console.error("User ID is undefined");
+    try {
+      if (user?._id) {
+        await updateUser(user?._id, email, username, description);
+        onProfileUpdated();
+        handleClose();
+      } else {
+        console.error("User ID is undefined");
+      }
+    } catch (error) {
+      setError("username", {
+        type: "manual",
+        message: "Username already exists",
+      });
+      console.error("Update user error", error);
     }
-    handleClose();
   };
 
   const handleCancel = () => {
@@ -101,7 +121,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                       <MDBInput
                         {...register("username", { required: true })}
                         wrapperClass="mb-4"
-                        label="Full Name"
+                        label="User Name"
                         defaultValue={user?.username}
                         id="formControlLg"
                         type="text"
@@ -118,6 +138,11 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                         placeholder="Enter your Description here..."
                         defaultValue={user?.description}
                       />
+                      {errors.username && (
+                        <div className="text-danger mb-3">
+                          {errors.username.message}
+                        </div>
+                      )}
                       <MDBBtn
                         outline
                         rounded

@@ -22,8 +22,7 @@ import { useNavigate } from "react-router-dom";
 
 type RegisterData = {
   email: string;
-  firstName: string;
-  lastName: string;
+  username: string;
   password: string;
 };
 
@@ -50,13 +49,12 @@ function SignUp() {
 
   const onSubmit = async (data: RegisterData) => {
     try {
-      const { email, firstName, lastName, password } = data;
-      const username = `${firstName} ${lastName}`;
+      const { email, username, password } = data;
       await registerUser(email, username, password);
       navigate("/");
     } catch (error) {
       console.error("Register error", error);
-      setErrorMessage("Register failed. Please check your email and password.");
+      setErrorMessage("Registration failed. Please check your details and ensure your username is unique.");
     }
   };
 
@@ -96,20 +94,9 @@ function SignUp() {
                 <MDBRow>
                   <MDBCol col="6">
                     <MDBInput
-                      {...register("firstName", { required: true })}
+                      {...register("username", { required: true })}
                       wrapperClass="mb-4"
-                      label="First name"
-                      id="formControlLg"
-                      type="text"
-                      size="lg"
-                    />
-                  </MDBCol>
-
-                  <MDBCol col="6">
-                    <MDBInput
-                      {...register("lastName", { required: true })}
-                      wrapperClass="mb-4"
-                      label="Last name"
+                      label="User name"
                       id="formControlLg"
                       type="text"
                       size="lg"
