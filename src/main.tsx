@@ -2,7 +2,6 @@ import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-// import "@fontsource/inter";
 import "./index.css";
 import App from "./App.tsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";

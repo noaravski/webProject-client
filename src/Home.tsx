@@ -5,7 +5,6 @@ import Post from "./Post";
 import { getPosts } from "./services/postService";
 import { getCommentsByPost } from "./services/commentService";
 import { useEffect, useState } from "react";
-// import { IPostResponse } from "./services/postService";
 import { useNavigate } from "react-router-dom";
 import { IPostWithComments } from "./services/postService";
 
@@ -70,6 +69,8 @@ const ScrollableCards = () => {
             content={card.content}
             comments={card.comments}
             likes={card.likes}
+            _id={card._id}
+            createdAt={card.createdAt}
           ></Post>
         ))}
       </div>

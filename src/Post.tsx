@@ -13,15 +13,17 @@ import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import { ICommentResponse } from "./services/commentService";
 import CommentsModal from "./modals/commentsModal";
 import Likes from "./buttons/Like";
+import { createComment } from "./services/commentService";
 
 interface PostProps {
   username: string;
   title: string;
   content: string;
-  publishDate: Date;
+  createdAt: Date;
   likes: number;
   comments: ICommentResponse[];
   _id: string;
+  userId: string;
 }
 
 export default function Post({
@@ -29,14 +31,41 @@ export default function Post({
   title,
   content,
   likes,
-  comments,
+  comments: initialComments,
   _id,
+  createdAt,
 }: PostProps) {
   const [liked, setLiked] = React.useState(0);
   const [isOpen, setIsOpen] = React.useState(false);
+  const [commentContent, setCommentContent] = React.useState("");
+  const [comments, setComments] =
+    React.useState<ICommentResponse[]>(initialComments);
 
   const openComments = () => setIsOpen(true);
   const closeComments = () => setIsOpen(false);
+
+  const handleCommentChange = async () => {
+    if (commentContent.trim() !== "") {
+      const newComment = await createComment(_id, commentContent, username);
+      setComments([...comments, newComment]);
+      setCommentContent("");
+    }
+  };
+
+  const getTimeAgo = () => {
+    const now = new Date();
+    const diff = now.getTime() - new Date(createdAt).getTime();
+    const diffInHours = Math.floor(diff / (1000 * 60 * 60));
+    const diffInDays = Math.floor(diffInHours / 24);
+
+    if (diffInHours < 1) {
+      return "Just now";
+    } else if (diffInDays > 0) {
+      return `${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`;
+    } else {
+      return `${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`;
+    }
+  };
 
   return (
     <Card
@@ -154,7 +183,7 @@ export default function Post({
             textAlign: "left",
           }}
         >
-          2 DAYS AGO
+          {getTimeAgo()}
         </Typography>
       </CardContent>
       <CardContent orientation="horizontal" sx={{ gap: 1 }}>
@@ -162,9 +191,11 @@ export default function Post({
           variant="plain"
           size="sm"
           placeholder="Add a comment…"
+          value={commentContent}
+          onChange={(e) => setCommentContent(e.target.value)}
           sx={{ flex: 1, px: 0, "--Input-focusedThickness": "0px" }}
         />
-        <Link disabled underline="none" role="button">
+        <Link underline="none" role="button" onClick={handleCommentChange}>
           Post
         </Link>
       </CardContent>
