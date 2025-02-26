@@ -11,7 +11,6 @@ import {
 } from "mdb-react-ui-kit";
 import movie from "../../assets/movie.png";
 import logo from "../../assets/logo.png";
-import google from "../../assets/google.png";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { login, googleLogin } from "../../services/userService";
 import { useForm } from "react-hook-form";
@@ -83,17 +82,6 @@ function Login() {
                   onSuccess={googleResponseMessage}
                   onError={googleErrorMessage}
                 >
-                  <MDBBtn
-                    className="mb-4"
-                    color="dark"
-                    size="sm"
-                    style={{ padding: "0px" }}
-                  >
-                    <div className="align-items-center">
-                      <img src={google} alt="logo" className="icon" />
-                      Log In with Google
-                    </div>
-                  </MDBBtn>
                 </GoogleLogin>
               </div>
               <div className="divider d-flex align-items-center mb-4 mt-2">

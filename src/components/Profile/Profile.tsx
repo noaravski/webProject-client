@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   MDBCol,
   MDBContainer,
@@ -14,6 +14,7 @@ import {
 import "./Profile.css";
 import { useLocation } from "react-router-dom";
 import { getUserById } from "../../services/userService";
+import { IUser } from "../../interfaces/user";
 
 import EditProfileModal from "../EditProfile/EditProfile";
 
@@ -22,7 +23,7 @@ const Profile: React.FC = () => {
   const queryParams = new URLSearchParams(location.search);
   const userId = queryParams.get("id");
 
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<IUser | null>(null);
 
   const fetchUser = async () => {
     const userData = await getUserById(userId || "");

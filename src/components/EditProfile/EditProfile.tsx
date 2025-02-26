@@ -14,16 +14,12 @@ import {
   MDBInput as OriginalMDBInput,
   MDBTextArea as OriginalMDBTextArea,
 } from "mdb-react-ui-kit";
+import { IUser } from "../../interfaces/user";
 
 interface EditProfileModalProps {
   open: boolean;
   handleClose: () => void;
-  user: {
-    _id: string;
-    email: string;
-    username: string;
-    description: string;
-  };
+  user: IUser | null;
   onProfileUpdated: () => void;
 }
 

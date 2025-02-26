@@ -12,7 +12,6 @@ import {
 } from "mdb-react-ui-kit";
 import movie from "../../assets/movie.png";
 import logo from "../../assets/logo.png";
-import google from "../../assets/google.png";
 import {
   register as registerUser,
   googleLogin,
@@ -87,17 +86,6 @@ function SignUp() {
                   onSuccess={googleResponseMessage}
                   onError={googleErrorMessage}
                 >
-                  <MDBBtn
-                    className="mb-4"
-                    color="dark"
-                    size="sm"
-                    style={{ padding: "0px" }}
-                  >
-                    <div className="align-items-center">
-                      <img src={google} alt="logo" className="icon" />
-                      Sign Up with Google
-                    </div>
-                  </MDBBtn>
                 </GoogleLogin>
               </div>
 

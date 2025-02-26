@@ -24,7 +24,8 @@ export interface IRegisterResponse {
 export interface IUpdateResponse {
   email: string;
   username: string;
-  description: string;
+  description?: string;
+  image?: string;
 }
 
 export const register = async (
@@ -99,12 +100,26 @@ export const updateUser = async (
   id: string,
   email: string,
   username: string,
-  description: string
+  description?: string,
+  image?: string
 ) => {
-  await axios.put<IUpdateResponse>(`http://localhost:3000/user/${id}`, {
+  const payload: Partial<IUpdateResponse> = {
     email,
     username,
-    description,
+  };
+
+  if (description) {
+    payload.description = description;
+  }
+
+  if (image) {
+    payload.image = image;
+  }
+
+  await axios.put<IUpdateResponse>(`http://localhost:3000/user/${id}`, payload, {
+    headers: {
+      Authorization: `Bearer ${getAuthTokenByName("accessToken")}`,
+    },
   });
 
 };
