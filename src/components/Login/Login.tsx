@@ -1,4 +1,4 @@
-import "../SignUp/SignUp.css";
+import "../Login/Login.css";
 import {
   MDBBtn,
   MDBContainer,
@@ -49,8 +49,8 @@ function Login() {
     try {
       const user = await login(email, password);
       console.log("user", user);
-      if (user && user._id) {
-        navigate(`/profile?id=${user._id}`);
+      if (user) {
+        navigate(`/`);
       }
     } catch (error) {
       console.error("Login error", error);
@@ -81,6 +81,7 @@ function Login() {
                   width={300}
                   onSuccess={googleResponseMessage}
                   onError={googleErrorMessage}
+                  click_listener={() => googleResponseMessage}
                 >
                 </GoogleLogin>
               </div>

@@ -70,7 +70,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     } catch (error) {
       setError("username", {
         type: "manual",
-        message: "Username already exists",
+        message: "User already exists",
       });
       console.error("Update user error", error);
     }

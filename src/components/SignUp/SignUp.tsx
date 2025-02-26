@@ -64,13 +64,14 @@ function SignUp() {
     <MDBContainer className="my-5">
       <MDBCard>
         <MDBRow className="g-0">
-          <MDBCol md="6">
+            <MDBCol md="6" className="d-none d-md-flex">
             <MDBCardImage
               src={movie}
               alt="login form"
-              className="rounded-start w-100"
+              className="rounded-start w-100 h-100"
+              style={{ objectFit: "cover" }}
             />
-          </MDBCol>
+            </MDBCol>
 
           <MDBCol md="6">
             <MDBCardBody className="d-flex flex-column">
