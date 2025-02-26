@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -7,71 +7,55 @@ import { addLike, isLiked, removeLike } from "../services/postService";
 
 interface LikesProps {
   postId: string;
+  likes: number;
+  setLikes: React.Dispatch<React.SetStateAction<number>>;
 }
+const Likes: React.FC<LikesProps> = ({ postId, userId, likes, setLikes }) => {
+  const [isLikedState, setIsLikedState] = useState(false);
 
-class Likes extends React.Component<LikesProps> {
-  state = {
-    likes: 0,
-  };
-
-  async componentDidMount() {
-    const { postId } = this.props;
-    try {
-      if (await isLiked(postId)) {
-        this.setState({
-          likes: 1,
-        });
-      }
-    } catch (error) {
-      console.error("Error checking if the post is liked:", error);
-    }
-  }
-  handleClick = async () => {
-    const { postId } = this.props;
-    if (this.state.likes === 0) {
+  useEffect(() => {
+    const checkIfLiked = async () => {
       try {
-        addLike(postId);
-        this.setState({
-          likes: 1,
-        });
+        const liked = await isLiked(postId);
+        setIsLikedState(liked);
+      } catch (error) {
+        console.error("Error checking if the post is liked:", error);
+      }
+    };
+
+    checkIfLiked();
+  }, [postId]);
+
+  const handleClick = async () => {
+    if (!isLikedState) {
+      try {
+        await addLike(postId);
+        setIsLikedState(true);
+        setLikes(likes + 1);
       } catch (error) {
         console.error("Error liking the post:", error);
       }
     } else {
       try {
-        removeLike(postId);
-        this.setState({
-          likes: 0,
-        });
+        await removeLike(postId);
+        setIsLikedState(false);
+        setLikes(likes - 1);
       } catch (error) {
         console.error("Error unliking the post:", error);
       }
     }
   };
-  render() {
-    return (
-      <div>
-        {this.state.likes == 0 ? (
-          <IconButton
-            variant="plain"
-            color="neutral"
-            size="sm"
-            onClick={this.handleClick}
-          >
-            <FavoriteBorder />
-          </IconButton>
-        ) : (
-          <IconButton
-            variant="plain"
-            color="danger"
-            size="sm"
-            onClick={this.handleClick}
-          >
-            <FavoriteIcon />
-          </IconButton>
-        )}
-      </div>
-    );
-  }
-}
+
+  return (
+    <IconButton
+      variant="plain"
+      color={isLikedState ? "danger" : "neutral"}
+      size="sm"
+      onClick={handleClick}
+    >
+      {isLikedState ? <FavoriteIcon /> : <FavoriteBorder />}
+    </IconButton>
+  );
+};
+
 export default Likes;

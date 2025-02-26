@@ -68,7 +68,7 @@ const ScrollableCards = () => {
             username={card.sender}
             content={card.content}
             comments={card.comments}
-            likes={card.likes}
+            likes={card.likes.length}
             _id={card._id}
             createdAt={card.createdAt}
           ></Post>

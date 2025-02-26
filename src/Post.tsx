@@ -30,13 +30,13 @@ export default function Post({
   username,
   title,
   content,
-  likes,
+  likes: initialLikes,
   comments: initialComments,
   _id,
   createdAt,
 }: PostProps) {
-  const [liked, setLiked] = React.useState(0);
   const [isOpen, setIsOpen] = React.useState(false);
+  const [likes, setLikes] = React.useState(initialLikes);
   const [commentContent, setCommentContent] = React.useState("");
   const [comments, setComments] =
     React.useState<ICommentResponse[]>(initialComments);
@@ -59,7 +59,7 @@ export default function Post({
     const diffInDays = Math.floor(diffInHours / 24);
 
     if (diffInHours < 1) {
-      return "Just now";
+      return `${Math.floor(diff / (1000 * 60))} minutes ago`;
     } else if (diffInDays > 0) {
       return `${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`;
     } else {
@@ -120,10 +120,7 @@ export default function Post({
         sx={{ alignItems: "center", mx: -1 }}
       >
         <Box sx={{ width: 0, display: "flex", gap: 0.5 }}>
-          <Likes postId={_id} />
-          <IconButton variant="plain" color="neutral" size="sm">
-            <ModeCommentOutlined />
-          </IconButton>
+          <Likes postId={_id} likes={likes} setLikes={setLikes} />
         </Box>
         <Box
           sx={{ width: 0, display: "flex", flexDirection: "row-reverse" }}
@@ -149,7 +146,7 @@ export default function Post({
           </Link>{" "}
           {content}
         </Typography>
-        {comments.length > 2 ? (
+        {
           <Typography
             onClick={openComments}
             sx={{
@@ -163,18 +160,7 @@ export default function Post({
               {comments.length} comments
             </Link>
           </Typography>
-        ) : (
-          comments.map((comment: ICommentResponse) => (
-            <div key={comment._id}>
-              <Typography sx={{ fontSize: "sm", textAlign: "left" }}>
-                <Box component="span" sx={{ fontWeight: "bold" }}>
-                  {`${comment.sender}: `}
-                </Box>
-                {`${comment.content}`}
-              </Typography>
-            </div>
-          ))
-        )}
+        }
         <Typography
           sx={{
             fontSize: "10px",
