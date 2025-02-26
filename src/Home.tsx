@@ -55,8 +55,7 @@ const ScrollableCards = () => {
       <div
         style={{
           display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
+          flexDirection: "column",
           alignItems: "center",
           padding: "2rem",
           gap: "2rem",

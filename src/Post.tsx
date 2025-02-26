@@ -70,7 +70,7 @@ export default function Post({
   return (
     <Card
       variant="outlined"
-      sx={{ width: 500, borderRadius: "lg", my: 2, mx: "auto" }}
+      sx={{ width: 800, borderRadius: "lg", my: 2, mx: "auto" }}
     >
       <CardContent
         orientation="horizontal"
@@ -102,9 +102,7 @@ export default function Post({
             }}
           />
         </Box>
-        <Typography sx={{ fontWeight: "lg", textDecoration: "none" }}>
-          {username}
-        </Typography>
+        <Typography sx={{ fontWeight: "lg" }}>{username}</Typography>
       </CardContent>
       <CardOverflow>
         <AspectRatio>
@@ -121,6 +119,14 @@ export default function Post({
       >
         <Box sx={{ width: 0, display: "flex", gap: 0.5 }}>
           <Likes postId={_id} likes={likes} setLikes={setLikes} />
+          <IconButton
+            variant="plain"
+            color="neutral"
+            size="sm"
+            onClick={openComments}
+          >
+            <ModeCommentOutlined />
+          </IconButton>
         </Box>
         <Box
           sx={{ width: 0, display: "flex", flexDirection: "row-reverse" }}
@@ -136,14 +142,13 @@ export default function Post({
           {likes} likes
         </Link>
         <Typography sx={{ fontSize: "sm", textAlign: "left" }}>
-          <Link
-            component="button"
+          <Typography
             color="neutral"
             textColor="text.primary"
             sx={{ fontWeight: "lg" }}
           >
             {username}
-          </Link>{" "}
+          </Typography>{" "}
           {content}
         </Typography>
         {

@@ -10,7 +10,7 @@ interface LikesProps {
   likes: number;
   setLikes: React.Dispatch<React.SetStateAction<number>>;
 }
-const Likes: React.FC<LikesProps> = ({ postId, userId, likes, setLikes }) => {
+const Likes: React.FC<LikesProps> = ({ postId, likes, setLikes }) => {
   const [isLikedState, setIsLikedState] = useState(false);
 
   useEffect(() => {

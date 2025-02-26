@@ -6,6 +6,7 @@ import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { ICommentResponse } from "../services/commentService";
+import Avatar from "@mui/joy/Avatar";
 
 const style = {
   position: "absolute",
@@ -17,6 +18,7 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  borderRadius: "16px",
 };
 
 interface CommentsModalProps {
@@ -30,10 +32,24 @@ const CommentsModal: React.FC<CommentsModalProps> = ({
   onClose,
   comments,
 }) => {
-    const sortedComments = [...comments].sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+  const sortedComments = [...comments].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
+  const getTimeAgo = (createdAt) => {
+    const now = new Date();
+    const diff = now.getTime() - new Date(createdAt).getTime();
+    const diffInHours = Math.floor(diff / (1000 * 60 * 60));
+    const diffInDays = Math.floor(diffInHours / 24);
+
+    if (diffInHours < 1) {
+      return `${Math.floor(diff / (1000 * 60))} minutes ago`;
+    } else if (diffInDays > 0) {
+      return `${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`;
+    } else {
+      return `${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`;
+    }
+  };
 
   return (
     <div>
@@ -52,30 +68,40 @@ const CommentsModal: React.FC<CommentsModalProps> = ({
       >
         <Fade in={isOpen}>
           <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
+            <Typography
+              id="transition-modal-title"
+              variant="h6"
+              component="h2"
+              align="center"
+            >
               Comments
             </Typography>
+            <div className="divider d-flex align-items-center mb-4 mt-2"></div>
             {sortedComments.map((comment) => (
-              <Box key={comment._id} sx={{ mt: 2 }}>
-                <Typography variant="body2" component="p">
-                  <span style={{ fontWeight: "bold" }}>{comment.sender}:</span>{" "}
-                  {comment.content}
-                </Typography>
-                <Typography variant="caption" component="p">
-                  {(() => {
-                    const hours = Math.round(
-                      (new Date().getTime() -
-                        new Date(comment.createdAt).getTime()) /
-                        (1000 * 60 * 60)
-                    );
-                    if (hours < 24) {
-                      return `${hours} hours ago`;
-                    } else {
-                      const days = Math.round(hours / 24);
-                      return `${days} days ago`;
-                    }
-                  })()}
-                </Typography>
+              <Box
+                key={comment._id}
+                sx={{ mt: 2, display: "flex", alignItems: "center" }}
+              >
+                <Avatar
+                  size="sm"
+                  src="https://i.pravatar.cc/30"
+                  sx={{
+                    border: "2px solid",
+                    borderColor: "background.body",
+                    mr: 2,
+                  }}
+                />
+                <Box>
+                  <Typography variant="body2" component="p">
+                    <span style={{ fontWeight: "bold" }}>
+                      {comment.sender}:
+                    </span>{" "}
+                    {comment.content}
+                  </Typography>
+                  <Typography variant="caption" component="p">
+                    {getTimeAgo(comment.createdAt)}
+                  </Typography>
+                </Box>
               </Box>
             ))}
           </Box>
