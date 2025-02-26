@@ -31,7 +31,7 @@ function Login() {
     const loginSuccess = await googleLogin(credentialResponse.credential);
 
     if (loginSuccess) {
-      navigate("/home");
+      navigate("/");
     } else {
       console.error("Login failed");
     }
@@ -46,7 +46,7 @@ function Login() {
     const loginSuccess = await login(email, password);
 
     if (loginSuccess) {
-      navigate("/home");
+      navigate("/");
     } else {
       console.error("Login failed");
     }
