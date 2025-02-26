@@ -10,10 +10,10 @@ import IconButton from "@mui/joy/IconButton";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
-import { ICommentResponse } from "./services/commentService";
-import CommentsModal from "./modals/commentsModal";
-import Likes from "./buttons/Like";
-import { createComment } from "./services/commentService";
+import { ICommentResponse } from "../../services/commentService";
+import CommentsModal from "../../modals/commentsModal";
+import Likes from "../../buttons/Like";
+import { createComment } from "../../services/commentService";
 
 interface PostProps {
   username: string;

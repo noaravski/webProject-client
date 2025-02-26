@@ -2,10 +2,8 @@ import axios, { CanceledError } from "axios";
 import {
   updateTokens,
   getAuthTokenByName,
-  refreshTokenName,
   removeAuthTokens,
 } from "../utils/localStorage";
-import { useNavigate } from "react-router-dom";
 import { getAuthHeaders } from "./authClientService";
 
 export { CanceledError };
@@ -13,6 +11,7 @@ export { CanceledError };
 export interface ILoginResponse {
   accessToken: string;
   refreshToken: string;
+  _id?: string;
 }
 
 export interface IRegisterResponse {
@@ -20,6 +19,13 @@ export interface IRegisterResponse {
   username: string;
   password: string;
   _id?: string;
+}
+
+export interface IUpdateResponse {
+  email: string;
+  username: string;
+  description?: string;
+  image?: string;
 }
 
 export const register = async (
@@ -34,6 +40,15 @@ export const register = async (
   });
 
   await login(username, password);
+};
+
+export const getUserById = async (id: string) => {
+  const { data } = await axios.get<IRegisterResponse>(
+    `http://localhost:3000/user/${id}`,
+    getAuthHeaders()
+  );
+
+  return data;
 };
 
 export const login = async (email: string, password: string) => {
@@ -76,4 +91,34 @@ export const googleLogin = async (credential?: string) => {
   return true;
 };
 
-export default { register, login, logout, googleLogin };
+export const updateUser = async (
+  id: string,
+  email: string,
+  username: string,
+  description?: string,
+  image?: string
+) => {
+  const payload: Partial<IUpdateResponse> = {
+    email,
+    username,
+  };
+
+  if (description) {
+    payload.description = description;
+  }
+
+  if (image) {
+    payload.image = image;
+  }
+
+  await axios.put<IUpdateResponse>(
+    `http://localhost:3000/user/${id}`,
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${getAuthTokenByName("accessToken")}`,
+      },
+    }
+  );
+};
+export default { register, login, logout, googleLogin, getUserById };

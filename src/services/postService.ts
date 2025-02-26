@@ -1,7 +1,5 @@
 import axios from "axios";
 import type { ICommentResponse } from "./commentService";
-import { getAuthTokenByName } from "../utils/localStorage";
-import { refreshTokenName } from "../utils/localStorage";
 import { getAuthHeaders } from "./authClientService";
 export interface IPostResponse {
   _id: string;

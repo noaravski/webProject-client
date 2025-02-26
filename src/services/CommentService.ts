@@ -1,11 +1,4 @@
 import axios from "axios";
-import { getAuthTokenByName } from "./authService";
-import {
-  updateTokens,
-  getAuthTokenByName,
-  refreshTokenName,
-  removeAuthTokens,
-} from "../utils/localStorage";
 import { getAuthHeaders } from "./authClientService";
 export interface ICommentResponse {
   _id: "string";
