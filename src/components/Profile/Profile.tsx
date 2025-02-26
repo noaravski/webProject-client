@@ -49,6 +49,11 @@ const Profile: React.FC = () => {
     const posts = await getPostsByUser();
     const postsWithComments: IPostWithComments[] = [];
 
+    posts.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
     for (const post of posts) {
       const comments = await getCommentsByPost(post._id);
       const postWithComments: IPostWithComments = {
@@ -170,7 +175,7 @@ const Profile: React.FC = () => {
                   }}
                 >
                   {cardsData.map((card) => (
-                    <Post 
+                    <Post
                       key={card.title}
                       username={card.sender}
                       content={card.content}
