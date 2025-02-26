@@ -39,13 +39,14 @@ const ScrollableCards = () => {
   }, []);
 
   return (
-    <div >
-      <Navbar/>
+    <div>
+      <Navbar />
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          marginTop: "60px",
           gap: "2rem",
         }}
       >

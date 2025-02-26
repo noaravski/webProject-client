@@ -32,7 +32,7 @@ const Profile: React.FC = () => {
   useEffect(() => {
     fetchUser();
   }, [userId]);
-  
+
   const handleProfileUpdated = () => {
     fetchUser();
   };
@@ -44,16 +44,7 @@ const Profile: React.FC = () => {
   const handleCloseEdit = () => setIsEditOpen(false);
 
   return (
-    <div
-      style={{
-        top: "0",
-        bottom: "0",
-        left: "0",
-        right: "0",
-        position: "absolute",
-        width: "100%",
-      }}
-    >
+    <div>
       <MDBContainer
         style={{
           top: "0",
@@ -61,7 +52,7 @@ const Profile: React.FC = () => {
           left: "0",
           right: "0",
           position: "absolute",
-          width: "100%",
+          marginTop: "150px",
         }}
       >
         <Navbar />

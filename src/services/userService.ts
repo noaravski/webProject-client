@@ -42,7 +42,7 @@ export const register = async (
   await login(username, password);
 };
 
-export const getUserById = async (id: string) => {
+export const getUserDetails = async (id: string) => {
   const { data } = await axios.get<IRegisterResponse>(
     `http://localhost:3000/user/${id}`,
     getAuthHeaders()
