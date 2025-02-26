@@ -30,7 +30,7 @@ const ScrollableCards = () => {
 
         postsWithComments.push(postWithComments);
       }
-      console.log(postsWithComments);
+      postsWithComments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       setCardsData(postsWithComments);
     };
     fetchPosts();
