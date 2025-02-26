@@ -1,4 +1,4 @@
-import "./SignUp.css";
+import "./css/SignUp.css";
 import {
   MDBBtn,
   MDBContainer,
@@ -13,10 +13,7 @@ import movie from "./assets/movie.png";
 import logo from "./assets/logo.png";
 import google from "./assets/google.png";
 import { register as registerUser, googleLogin } from "./services/userService";
-import {
-  CredentialResponse,
-  GoogleLogin,
-} from "@react-oauth/google";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useForm } from "react-hook-form";
 
 type RegisterData = {

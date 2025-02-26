@@ -5,6 +5,8 @@ import {
   refreshTokenName,
   removeAuthTokens,
 } from "../utils/localStorage";
+import { useNavigate } from "react-router-dom";
+import { getAuthHeaders } from "./authClientService";
 
 export { CanceledError };
 
@@ -35,26 +37,27 @@ export const register = async (
 };
 
 export const login = async (email: string, password: string) => {
-  const data = (
-    await axios.post<ILoginResponse>("http://localhost:3000/user/login", {
-      email,
-      password,
-    })
-  ).data;
+  try {
+    const data = (
+      await axios.post<ILoginResponse>("http://localhost:3000/user/login", {
+        email,
+        password,
+      })
+    ).data;
 
-  updateTokens(data);
+    updateTokens(data);
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
 };
 
 export const logout = async () => {
-  const refreshToken = getAuthTokenByName(refreshTokenName);
   await axios.post<IRegisterResponse>(
     "http://localhost:3000/user/logout",
     {},
-    {
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-      },
-    }
+    getAuthHeaders()
   );
   removeAuthTokens();
 };
@@ -70,7 +73,7 @@ export const googleLogin = async (credential?: string) => {
   ).data;
 
   updateTokens(tokens);
-  console.log("after server valid", tokens);
+  return true;
 };
 
 export default { register, login, logout, googleLogin };

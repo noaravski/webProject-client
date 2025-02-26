@@ -1,4 +1,4 @@
-import "./SignUp.css";
+import "./css/Login.css";
 import {
   MDBBtn,
   MDBContainer,
@@ -13,10 +13,9 @@ import movie from "./assets/movie.png";
 import logo from "./assets/logo.png";
 import google from "./assets/google.png";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { login , googleLogin } from "./services/userService";
+import { login, googleLogin } from "./services/userService";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-
 
 type LoginData = {
   email: string;
@@ -24,8 +23,18 @@ type LoginData = {
 };
 
 function Login() {
-  const googleResponseMessage = (credentialResponse: CredentialResponse) => {
-    googleLogin(credentialResponse.credential);
+  const navigate = useNavigate();
+
+  const googleResponseMessage = async (
+    credentialResponse: CredentialResponse
+  ) => {
+    const loginSuccess = await googleLogin(credentialResponse.credential);
+
+    if (loginSuccess) {
+      navigate("/home");
+    } else {
+      console.error("Login failed");
+    }
   };
 
   const googleErrorMessage = () => {
@@ -34,13 +43,17 @@ function Login() {
 
   const onSubmit = async (data: LoginData) => {
     const { email, password } = data;
-    await login(email, password);
+    const loginSuccess = await login(email, password);
+
+    if (loginSuccess) {
+      navigate("/home");
+    } else {
+      console.error("Login failed");
+    }
   };
 
   const { register, handleSubmit } = useForm<LoginData>({});
-  const navigate = useNavigate();
-  
-  
+
   return (
     <MDBContainer className="my-5">
       <MDBCard style={{ maxWidth: "500vw" }}>
@@ -61,9 +74,10 @@ function Login() {
               </div>
               <div className="d-flex justify-content-center align-items-center">
                 <GoogleLogin
-                width={300}
+                  width={300}
                   onSuccess={googleResponseMessage}
                   onError={googleErrorMessage}
+                  click_listener={() => googleResponseMessage}
                 >
                   <MDBBtn
                     className="mb-4"
