@@ -11,6 +11,7 @@ export { CanceledError };
 export interface ILoginResponse {
   accessToken: string;
   refreshToken: string;
+  _id?: string;
 }
 
 export interface IRegisterResponse {
@@ -18,6 +19,12 @@ export interface IRegisterResponse {
   username: string;
   password: string;
   _id?: string;
+}
+
+export interface IUpdateResponse {
+  email: string;
+  username: string;
+  description: string;
 }
 
 export const register = async (
@@ -34,6 +41,20 @@ export const register = async (
   await login(username, password);
 };
 
+export const getUserById = async (id: string) => {
+  const token = getAuthTokenByName("accessToken");
+  const { data } = await axios.get<IRegisterResponse>(
+    `http://localhost:3000/user/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return data;
+};
+
 export const login = async (email: string, password: string) => {
   const data = (
     await axios.post<ILoginResponse>("http://localhost:3000/user/login", {
@@ -43,6 +64,7 @@ export const login = async (email: string, password: string) => {
   ).data;
 
   updateTokens(data);
+  return data;
 };
 
 export const logout = async () => {
@@ -73,4 +95,17 @@ export const googleLogin = async (credential?: string) => {
   console.log("after server valid", tokens);
 };
 
-export default { register, login, logout, googleLogin };
+export const updateUser = async (
+  id: string,
+  email: string,
+  username: string,
+  description: string
+) => {
+  await axios.put<IUpdateResponse>(`http://localhost:3000/user/${id}`, {
+    email,
+    username,
+    description,
+  });
+
+};
+export default { register, login, logout, googleLogin, getUserById };

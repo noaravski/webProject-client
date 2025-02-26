@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./SignUp.css";
 import {
   MDBBtn,
@@ -9,41 +10,62 @@ import {
   MDBCol,
   MDBInput,
 } from "mdb-react-ui-kit";
-import movie from "./assets/movie.png";
-import logo from "./assets/logo.png";
-import google from "./assets/google.png";
+import movie from "../../assets/movie.png";
+import logo from "../../assets/logo.png";
+import google from "../../assets/google.png";
+import {
+  register as registerUser,
+  googleLogin,
+} from "../../services/userService";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { login , googleLogin } from "./services/userService";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-
-type LoginData = {
+type RegisterData = {
   email: string;
+  firstName: string;
+  lastName: string;
   password: string;
 };
 
-function Login() {
-  const googleResponseMessage = (credentialResponse: CredentialResponse) => {
-    googleLogin(credentialResponse.credential);
+function SignUp() {
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const googleResponseMessage = async (
+    credentialResponse: CredentialResponse
+  ) => {
+    try {
+      await googleLogin(credentialResponse.credential);
+      navigate("/");
+    } catch (error) {
+      console.error("Google login error", error);
+      setErrorMessage("Google login failed. Please try again.");
+    }
   };
 
   const googleErrorMessage = () => {
     console.error("Google error");
+    setErrorMessage("Google login failed. Please try again.");
   };
 
-  const onSubmit = async (data: LoginData) => {
-    const { email, password } = data;
-    await login(email, password);
+  const onSubmit = async (data: RegisterData) => {
+    try {
+      const { email, firstName, lastName, password } = data;
+      const username = `${firstName} ${lastName}`;
+      await registerUser(email, username, password);
+      navigate("/");
+    } catch (error) {
+      console.error("Register error", error);
+      setErrorMessage("Register failed. Please check your email and password.");
+    }
   };
 
-  const { register, handleSubmit } = useForm<LoginData>({});
-  const navigate = useNavigate();
-  
-  
+  const { register, handleSubmit } = useForm<RegisterData>({});
+
   return (
     <MDBContainer className="my-5">
-      <MDBCard style={{ maxWidth: "500vw" }}>
+      <MDBCard>
         <MDBRow className="g-0">
           <MDBCol md="6">
             <MDBCardImage
@@ -61,7 +83,7 @@ function Login() {
               </div>
               <div className="d-flex justify-content-center align-items-center">
                 <GoogleLogin
-                width={300}
+                  width={300}
                   onSuccess={googleResponseMessage}
                   onError={googleErrorMessage}
                 >
@@ -73,7 +95,7 @@ function Login() {
                   >
                     <div className="align-items-center">
                       <img src={google} alt="logo" className="icon" />
-                      Log In with Google
+                      Sign Up with Google
                     </div>
                   </MDBBtn>
                 </GoogleLogin>
@@ -83,6 +105,30 @@ function Login() {
                 <p className="text-center fw-bold mx-3 mt-0 mb-0">OR</p>
               </div>
               <form onSubmit={handleSubmit(onSubmit)}>
+                <MDBRow>
+                  <MDBCol col="6">
+                    <MDBInput
+                      {...register("firstName", { required: true })}
+                      wrapperClass="mb-4"
+                      label="First name"
+                      id="formControlLg"
+                      type="text"
+                      size="lg"
+                    />
+                  </MDBCol>
+
+                  <MDBCol col="6">
+                    <MDBInput
+                      {...register("lastName", { required: true })}
+                      wrapperClass="mb-4"
+                      label="Last name"
+                      id="formControlLg"
+                      type="text"
+                      size="lg"
+                    />
+                  </MDBCol>
+                </MDBRow>
+
                 <MDBInput
                   {...register("email", { required: true })}
                   wrapperClass="mb-4"
@@ -99,25 +145,26 @@ function Login() {
                   type="password"
                   size="lg"
                 />
-
+                {errorMessage && (
+                  <div className="text-danger mb-3">{errorMessage}</div>
+                )}
                 <MDBBtn
-                  type="submit"
-                  className="mb-4 px-5"
+                  className="mb-4 px-5 mt-6"
                   color="dark"
                   size="lg"
-                  style={{ marginTop: "20px" }}
+                  style={{ marginTop: "10px" }}
                 >
-                  Login
+                  Sign Up
                 </MDBBtn>
               </form>
               <p className="mb-3 pb-lg-2" style={{ color: "#393f81" }}>
-                Don't have an account?{" "}
+                Already have an account?{" "}
                 <a
                   href="#!"
                   style={{ color: "#393f81" }}
-                  onClick={() => navigate("/signup")}
+                  onClick={() => navigate("/login")}
                 >
-                  Register here
+                  Login here
                 </a>
               </p>
             </MDBCardBody>
@@ -128,4 +175,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default SignUp;
