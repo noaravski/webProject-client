@@ -19,12 +19,15 @@ export interface IPostWithComments {
 }
 
 export const getPosts = async () => {
-  const response = await axios.get<IPostResponse[]>("http://localhost:3000/");
+  const response = await axios.get<IPostWithComments[]>(
+    "http://localhost:3000/"
+  );
+  console.log(response.data);
   return response.data;
 };
 
 export const getPostsByUser = async () => {
-  const response = await axios.get<IPostResponse[]>(
+  const response = await axios.get<IPostWithComments[]>(
     `http://localhost:3000/user/posts`,
     getAuthHeaders()
   );

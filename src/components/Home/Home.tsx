@@ -25,16 +25,11 @@ const ScrollableCards = () => {
         const postWithComments: IPostWithComments = {
           ...post,
           comments: comments,
-          likes: [],
-          createdAt: new Date(),
         };
 
         postsWithComments.push(postWithComments);
       }
-      postsWithComments.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
+
       setCardsData(postsWithComments);
     };
     fetchPosts();
