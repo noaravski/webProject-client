@@ -39,7 +39,7 @@ const ScrollableCards = () => {
   }, []);
 
   return (
-    <div>
+    <div style={{ display: "flex", width: "100vh", flexDirection: "column" }}>
       <Navbar />
       <div
         style={{

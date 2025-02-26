@@ -1,3 +1,4 @@
+import "../Profile/Profile.css";
 import React, { useState, useEffect } from "react";
 import {
   MDBCol,
@@ -10,18 +11,16 @@ import {
   MDBBtn,
 } from "mdb-react-ui-kit";
 import "./Profile.css";
-import { useLocation } from "react-router-dom";
 import { getUserDetails } from "../../services/userService";
 import { IUser } from "../../interfaces/user";
+import { getPostsByUser, IPostWithComments } from "../../services/postService";
+import { getCommentsByPost } from "../../services/commentService";
 
 import EditProfileModal from "../EditProfile/EditProfile";
 import Navbar from "../Navbar/Navbar";
+import Post from "../Post/Post";
 
 const Profile: React.FC = () => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const userId = queryParams.get("id");
-
   const [user, setUser] = useState<IUser | null>(null);
 
   const fetchUser = async () => {
@@ -31,7 +30,8 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     fetchUser();
-  }, [userId]);
+    fetchPosts();
+  }, []);
 
   const handleProfileUpdated = () => {
     fetchUser();
@@ -42,6 +42,29 @@ const Profile: React.FC = () => {
     setIsEditOpen(true);
   };
   const handleCloseEdit = () => setIsEditOpen(false);
+
+  const [cardsData, setCardsData] = useState<IPostWithComments[]>([]);
+
+  const fetchPosts = async () => {
+    const posts = await getPostsByUser();
+    const postsWithComments: IPostWithComments[] = [];
+
+    posts.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
+    for (const post of posts) {
+      const comments = await getCommentsByPost(post._id);
+      const postWithComments: IPostWithComments = {
+        ...post,
+        comments: comments,
+      };
+
+      postsWithComments.push(postWithComments);
+    }
+    setCardsData(postsWithComments);
+  };
 
   return (
     <div>
@@ -127,6 +150,42 @@ const Profile: React.FC = () => {
                     <MDBCardText>{user?.description}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
+        </MDBRow>
+        <MDBRow>
+          <MDBCol lg="15">
+            <MDBCard className="mb-4">
+              <MDBCardBody>
+                <MDBRow>
+                  <MDBCol>
+                    <MDBCardText>Posts</MDBCardText>
+                  </MDBCol>
+                </MDBRow>
+                <hr />
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    marginTop: "60px",
+                    gap: "2rem",
+                    width: "100%",
+                  }}
+                >
+                  {cardsData.map((card) => (
+                    <Post
+                      key={card.title}
+                      username={card.sender}
+                      content={card.content}
+                      comments={card.comments}
+                      likes={card.likes.length}
+                      _id={card._id}
+                      createdAt={card.createdAt}
+                    ></Post>
+                  ))}
+                </div>
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
