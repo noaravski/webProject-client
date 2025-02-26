@@ -15,10 +15,19 @@ export interface IPostWithComments {
   sender: string;
   comments: ICommentResponse[];
   likes: string[];
+  createdAt: Date;
 }
 
 export const getPosts = async () => {
   const response = await axios.get<IPostResponse[]>("http://localhost:3000/");
+  return response.data;
+};
+
+export const getPostsByUser = async () => {
+  const response = await axios.get<IPostResponse[]>(
+    `http://localhost:3000/user/posts`,
+    getAuthHeaders()
+  );
   return response.data;
 };
 

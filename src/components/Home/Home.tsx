@@ -25,6 +25,8 @@ const ScrollableCards = () => {
         const postWithComments: IPostWithComments = {
           ...post,
           comments: comments,
+          likes: [],
+          createdAt: new Date(),
         };
 
         postsWithComments.push(postWithComments);
@@ -39,7 +41,7 @@ const ScrollableCards = () => {
   }, []);
 
   return (
-    <div>
+    <div style={{ display: "flex", width: "100vh", flexDirection: "column" }}>
       <Navbar />
       <div
         style={{

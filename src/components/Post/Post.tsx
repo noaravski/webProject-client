@@ -1,3 +1,4 @@
+import "../Post/Post.css";
 import * as React from "react";
 import AspectRatio from "@mui/joy/AspectRatio";
 import CardOverflow from "@mui/joy/CardOverflow";
@@ -10,10 +11,9 @@ import IconButton from "@mui/joy/IconButton";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
-import { ICommentResponse } from "../../services/commentService";
+import { ICommentResponse, createComment } from "../../services/commentService";
 import CommentsModal from "../../modals/commentsModal";
 import Likes from "../../buttons/Like";
-import { createComment } from "../../services/commentService";
 
 interface PostProps {
   username: string;
@@ -70,7 +70,7 @@ export default function Post({
   return (
     <Card
       variant="outlined"
-      sx={{ width: 800, borderRadius: "lg", my: 2, mx: "auto" }}
+      sx={{ width: "80%", borderRadius: "lg", my: 2, mx: "auto" }}
     >
       <CardContent
         orientation="horizontal"

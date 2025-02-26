@@ -5,7 +5,6 @@ import {
   removeAuthTokens,
 } from "../utils/localStorage";
 import { getAuthHeaders } from "./authClientService";
-import { get } from "react-hook-form";
 
 export { CanceledError };
 
