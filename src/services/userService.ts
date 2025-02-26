@@ -5,6 +5,7 @@ import {
   removeAuthTokens,
 } from "../utils/localStorage";
 import { getAuthHeaders } from "./authClientService";
+import { get } from "react-hook-form";
 
 export { CanceledError };
 
@@ -42,13 +43,13 @@ export const register = async (
   await login(username, password);
 };
 
-export const getUserById = async (id: string) => {
-  const { data } = await axios.get<IRegisterResponse>(
-    `http://localhost:3000/user/${id}`,
+export const getUserDetails = async () => {
+  const response = await axios.get(
+    "http://localhost:3000/user/details",
     getAuthHeaders()
   );
 
-  return data;
+  return response.data;
 };
 
 export const login = async (email: string, password: string) => {
@@ -121,4 +122,4 @@ export const updateUser = async (
     }
   );
 };
-export default { register, login, logout, googleLogin, getUserById };
+export default { register, login, logout, googleLogin, getUserDetails, updateUser };

@@ -1,27 +1,37 @@
-import { MDBNavbar, MDBNavbarBrand, MDBContainer } from "mdb-react-ui-kit";
-import logo from "../../assets/popcorn.png";
-
+import {
+  MDBNavbar,
+  MDBContainer,
+  MDBNavbarNav,
+  MDBNavbarItem,
+  MDBNavbarLink,
+  MDBNavbarBrand,
+} from "mdb-react-ui-kit";
+ import logo from "../../assets/popcorn.png";
+ 
 const Navbar = () => {
+
   return (
-    <div className="home mb-10">
-      <MDBNavbar dark bgColor="dark" fixed="top">
+    <>
+      <MDBNavbar expand="lg" dark bgColor="dark" fixed="top">
         <MDBContainer fluid>
-          <MDBNavbarBrand className="text-white">
-            <img
-              src={logo}
-              alt="logo"
-              width="30"
-              height="30"
-              className="d-inline-block align-text-top me-2"
-            ></img>
+          <MDBNavbarBrand>
+            <img src={logo} width="30" height="30"></img>
             MovieRator
           </MDBNavbarBrand>
-          <MDBNavbarBrand href="/" className="text-white">
-            Home    
-        </MDBNavbarBrand>
+
+            <MDBNavbarNav className="me-auto mb-2 mb-lg-0">
+              <MDBNavbarItem className="active">
+                <MDBNavbarLink aria-current="page" href="/">
+                  Home
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+              <MDBNavbarItem>
+                <MDBNavbarLink href="/Profile">Profile</MDBNavbarLink>
+              </MDBNavbarItem>
+            </MDBNavbarNav>
         </MDBContainer>
       </MDBNavbar>
-    </div>
+    </>
   );
 };
 
