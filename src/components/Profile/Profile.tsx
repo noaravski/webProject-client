@@ -8,8 +8,6 @@ import {
   MDBCardBody,
   MDBCardImage,
   MDBBtn,
-  MDBBreadcrumb,
-  MDBBreadcrumbItem,
 } from "mdb-react-ui-kit";
 import "./Profile.css";
 import { useLocation } from "react-router-dom";
@@ -17,6 +15,7 @@ import { getUserById } from "../../services/userService";
 import { IUser } from "../../interfaces/user";
 
 import EditProfileModal from "../EditProfile/EditProfile";
+import Navbar from "../Navbar/Navbar";
 
 const Profile: React.FC = () => {
   const location = useLocation();
@@ -65,20 +64,7 @@ const Profile: React.FC = () => {
           width: "100%",
         }}
       >
-        <MDBRow>
-          <MDBCol>
-            <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
-              <MDBBreadcrumbItem>
-                <a href="#">Home</a>
-              </MDBBreadcrumbItem>
-              <MDBBreadcrumbItem>
-                <a href="#">User</a>
-              </MDBBreadcrumbItem>
-              <MDBBreadcrumbItem active>User Profile</MDBBreadcrumbItem>
-            </MDBBreadcrumb>
-          </MDBCol>
-        </MDBRow>
-
+        <Navbar />
         <MDBRow>
           <MDBCol lg="5">
             <MDBCard className="mb-4">

@@ -1,6 +1,5 @@
 import "./Home.css";
-import { MDBNavbar, MDBNavbarBrand, MDBContainer } from "mdb-react-ui-kit";
-import logo from "../../assets/popcorn.png";
+import Navbar from "../Navbar/Navbar";
 import Post from "../Post/Post";
 import { getPosts } from "../../services/postService";
 import { getCommentsByPost } from "../../services/commentService";
@@ -40,27 +39,13 @@ const ScrollableCards = () => {
   }, []);
 
   return (
-    <div className="home">
-      <MDBNavbar dark bgColor="dark" fixed="top">
-        <MDBContainer fluid>
-          <MDBNavbarBrand href="#profile" className="text-white">
-            <img
-              src={logo}
-              alt="logo"
-              width="30"
-              height="30"
-              className="d-inline-block align-text-top me-2"
-            ></img>
-            MovieRator
-          </MDBNavbarBrand>
-        </MDBContainer>
-      </MDBNavbar>
+    <div >
+      <Navbar/>
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          padding: "2rem",
           gap: "2rem",
         }}
       >
