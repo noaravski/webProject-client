@@ -33,13 +33,17 @@ export const register = async (
   username: string,
   password: string
 ) => {
-  await axios.post<IRegisterResponse>("http://localhost:3000/user/", {
+  const response = await axios.post<IRegisterResponse>("http://localhost:3000/user/", {
     email,
     username,
     password,
   });
 
-  await login(username, password);
+  if (response.status !== 201) {
+    return false;
+  }
+
+  return await login(email, password);
 };
 
 export const getUserDetails = async () => {
@@ -53,15 +57,19 @@ export const getUserDetails = async () => {
 
 export const login = async (email: string, password: string) => {
   try {
-    const data = (
-      await axios.post<ILoginResponse>("http://localhost:3000/user/login", {
-        email,
-        password,
-      })
-    ).data;
+    const response = await axios.post<ILoginResponse>("http://localhost:3000/user/login", {
+      email,
+      password,
+    })
+    const data = response.data
 
-    updateTokens(data);
-    return true;
+    if (response.status !== 200) {
+      return false;
+    }
+    else {
+      updateTokens(data);
+      return true;
+    }
   } catch (e) {
     console.log(e);
     return false;
