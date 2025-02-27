@@ -4,12 +4,15 @@ import axios from 'axios';
 
 const handleUpload = async (file: File) => {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('image', file);
 
     const response = await axios.post('http://localhost:3000/api/upload', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
+    }).catch((error) => {
+        console.error('Error uploading file', error);
+        throw new Error(error.response.data.message);
     });
 
     return response;

@@ -108,7 +108,7 @@ function SignUp() {
                 <p className="text-center fw-bold mx-3 mt-0 mb-0">OR</p>
               </div>
               <form onSubmit={handleSubmit(onSubmit)}>
-                <ProfilePic onFileSelect={(file) => setProfilePic(file)} />
+                  <ProfilePic onFileSelect={(file) => setProfilePic(file)} />
                 <MDBRow>
                   <MDBCol col="6">
                     <MDBInput
