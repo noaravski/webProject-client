@@ -5,13 +5,14 @@ import {
   removeAuthTokens,
 } from "../utils/localStorage";
 import { getAuthHeaders } from "./authClientService";
+import ProfilePic from "../components/ProfilePic/Profilepic";
 
 export { CanceledError };
 
 export interface ILoginResponse {
   accessToken: string;
   refreshToken: string;
-  _id?: string;
+  _id: string;
 }
 
 export interface IRegisterResponse {
@@ -31,13 +32,18 @@ export interface IUpdateResponse {
 export const register = async (
   email: string,
   username: string,
-  password: string
+  password: string,
+  profilePic: string,
 ) => {
-  const response = await axios.post<IRegisterResponse>("http://localhost:3000/user/", {
-    email,
-    username,
-    password,
-  });
+  const response = await axios.post<IRegisterResponse>(
+    "http://localhost:3000/user/",
+    {
+      email,
+      username,
+      password,
+      profilePic,
+    }
+  );
 
   if (response.status !== 201) {
     return false;
@@ -68,7 +74,7 @@ export const login = async (email: string, password: string) => {
     }
     else {
       updateTokens(data);
-      return true;
+      return data;
     }
   } catch (e) {
     console.log(e);

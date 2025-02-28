@@ -32,7 +32,7 @@ type RegisterData = {
 function SignUp() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [profilePic, setProfilePic] = useState<File | null>(null);
+  const [profilePic, setProfilePic] = useState<File | undefined>(null);
   const { register, handleSubmit } = useForm<RegisterData>();
 
   const googleResponseMessage = async (
@@ -54,23 +54,28 @@ function SignUp() {
 
   const onSubmit = async (data: RegisterData) => {
     try {
-      const { email, username, password, profilePic } = data;
-      const res = await registerUser(email, username, password);
+      const { email, username, password } = data;
+      const res = await registerUser(email, username, password,profilePic?.name);
+      if (profilePic !== undefined && res) {
+        const uploadResponse = await handleUpload(profilePic,res._id);
+        console.log(uploadResponse);
 
-      if (profilePic) {
-        const res = await handleUpload(profilePic);
+        // const res = await handleUpload(profilePic);
       }
 
       if (res) {
         console.log("User registered and logined successfully");
         navigate("/");
-      }
-      else {
-        setErrorMessage("Registration failed. Please check your details and ensure your username is unique.");
+      } else {
+        setErrorMessage(
+          "Registration failed. Please check your details and ensure your username is unique."
+        );
       }
     } catch (error) {
       console.error("Register error", error);
-      setErrorMessage("Registration failed. Please check your details and ensure your username is unique.");
+      setErrorMessage(
+        "Registration failed. Please check your details and ensure your username is unique."
+      );
     }
   };
 
@@ -100,15 +105,14 @@ function SignUp() {
                   width={300}
                   onSuccess={googleResponseMessage}
                   onError={googleErrorMessage}
-                >
-                </GoogleLogin>
+                ></GoogleLogin>
               </div>
 
               <div className="divider d-flex align-items-center mb-4 mt-2">
                 <p className="text-center fw-bold mx-3 mt-0 mb-0">OR</p>
               </div>
               <form onSubmit={handleSubmit(onSubmit)}>
-                  <ProfilePic onFileSelect={(file) => setProfilePic(file)} />
+                <ProfilePic onFileSelect={(file) => setProfilePic(file)} />
                 <MDBRow>
                   <MDBCol col="6">
                     <MDBInput

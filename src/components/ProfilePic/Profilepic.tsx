@@ -4,7 +4,8 @@ import handleUpload from '../../services/fileService';
 
 
 interface ProfilePicProps {
-    onFileSelect: (fileUrl: string) => void;
+    // onFileSelect: (fileUrl: string) => void;
+    onFileSelect: (file:File) => void;
 }
 
 const ProfilePic: React.FC<ProfilePicProps> = ({ onFileSelect }) => {
@@ -18,14 +19,14 @@ const ProfilePic: React.FC<ProfilePicProps> = ({ onFileSelect }) => {
                 setPreview(reader.result);
             };
             reader.readAsDataURL(selectedFile);
-
-            try {
-                const response = await handleUpload(selectedFile);
-                console.log(response);
-                onFileSelect(response.data.fileUrl);
-            } catch (error) {
-                console.error('Error uploading file', error);
-            }
+            onFileSelect(selectedFile);
+            // try {
+            //     const response = await handleUpload(selectedFile);
+            //     console.log(response);
+            //     onFileSelect(response.data.fileUrl);
+            // } catch (error) {
+            //     console.error('Error uploading file', error);
+            // }
         }
     };
 
