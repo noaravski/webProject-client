@@ -36,7 +36,6 @@ export default function AddPost() {
         content: content,
       };
       const post = await createPost(postData);
-      console.log("post", post);
       if (post) {
         navigate(`/`);
       }
