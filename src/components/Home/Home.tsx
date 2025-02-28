@@ -52,7 +52,7 @@ const ScrollableCards = () => {
       >
         {cardsData.map((card) => (
           <Post
-            key={card.title}
+            key={card._id}
             username={card.sender}
             content={card.content}
             comments={card.comments}
