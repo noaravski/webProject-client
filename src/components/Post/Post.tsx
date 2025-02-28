@@ -17,18 +17,15 @@ import Likes from "../../buttons/Like";
 
 interface PostProps {
   username: string;
-  title: string;
   content: string;
   createdAt: Date;
   likes: number;
   comments: ICommentResponse[];
   _id: string;
-  userId: string;
 }
 
 export default function Post({
   username,
-  title,
   content,
   likes: initialLikes,
   comments: initialComments,
@@ -46,7 +43,7 @@ export default function Post({
 
   const handleCommentChange = async () => {
     if (commentContent.trim() !== "") {
-      const newComment = await createComment(_id, commentContent, username);
+      const newComment = await createComment(_id, commentContent);
       setComments([...comments, newComment]);
       setCommentContent("");
     }

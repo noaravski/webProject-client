@@ -1,16 +1,10 @@
 import axios from "axios";
 import type { ICommentResponse } from "./commentService";
 import { getAuthHeaders } from "./authClientService";
-export interface IPostResponse {
-  _id: string;
-  title: string;
-  content: string;
-  sender: string;
-}
+import { ICreatePost } from "../interfaces/post";
 
 export interface IPostWithComments {
   _id: string;
-  title: string;
   content: string;
   sender: string;
   comments: ICommentResponse[];
@@ -20,7 +14,7 @@ export interface IPostWithComments {
 
 export const getPosts = async () => {
   const response = await axios.get<IPostWithComments[]>(
-    "http://localhost:3000/"
+    "http://localhost:3000/posts"
   );
   console.log(response.data);
   return response.data;
@@ -32,6 +26,20 @@ export const getPostsByUser = async () => {
     getAuthHeaders()
   );
   return response.data;
+};
+
+export const createPost = async (postData: ICreatePost) => {
+  try {
+    const response = await axios.post<ICreatePost>(
+      "http://localhost:3000/post",
+      postData,
+      getAuthHeaders(),
+    );
+    return response.data;
+  } catch (e) {
+    console.error(e);
+    throw new Error("Failed to create post");
+  }
 };
 
 export const addLike = async (postId: string) => {
