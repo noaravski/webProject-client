@@ -24,7 +24,7 @@ interface PostProps {
   _id: string;
 }
 
-export default function Post({
+export default function NewPost({
   username,
   content,
   likes: initialLikes,
