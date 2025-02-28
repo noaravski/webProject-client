@@ -55,21 +55,22 @@ function SignUp() {
   const onSubmit = async (data: RegisterData) => {
     try {
       const { email, username, password } = data;
-      const res = await registerUser(email, username, password,profilePic?.name);
+      const res = await registerUser(
+        email,
+        username,
+        password,
+        profilePic?.name
+      );
       if (profilePic !== undefined && res) {
-        const uploadResponse = await handleUpload(profilePic,res._id);
-        console.log(uploadResponse);
-
-        // const res = await handleUpload(profilePic);
-      }
-
-      if (res) {
-        console.log("User registered and logined successfully");
-        navigate("/");
-      } else {
-        setErrorMessage(
-          "Registration failed. Please check your details and ensure your username is unique."
-        );
+        const uploadResponse = await handleUpload(profilePic, res._id);
+        if (uploadResponse.status === 200) {
+          console.log("User registered and logined successfully");
+          navigate("/");
+        } else {
+          setErrorMessage(
+            "Registration failed. Please check your details and ensure your username is unique."
+          );
+        }
       }
     } catch (error) {
       console.error("Register error", error);

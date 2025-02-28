@@ -33,7 +33,7 @@ export const register = async (
   email: string,
   username: string,
   password: string,
-  profilePic: string,
+  profilePic?: string,
 ) => {
   const response = await axios.post<IRegisterResponse>(
     "http://localhost:3000/user/",
