@@ -19,7 +19,6 @@ export const getCommentsByPost = async (postId) => {
 export const createComment = async (
   postId: string,
   content: string,
-  username: string
 ) => {
   try {
     const response = await axios.post(
@@ -27,7 +26,6 @@ export const createComment = async (
       {
         postId: postId,
         content: content,
-        sender: username,
       },
       getAuthHeaders()
     );
