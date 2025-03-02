@@ -19,7 +19,6 @@ import Likes from "../../buttons/Like";
 import EditPost from "../EditPost/EditPost";
 import { getPostById, deletePost } from "../../services/postService";
 import { ICreatePost } from "../../interfaces/post";
-import { Modal, Button } from "@mui/material";
 import ConfirmDeletion from "../ConfirmDeletion/ConfirmDeletion";
 
 interface PostProps {
