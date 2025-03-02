@@ -44,7 +44,7 @@ const Profile: React.FC = () => {
   const handleCloseEdit = () => setIsEditOpen(false);
 
   const [cardsData, setCardsData] = useState<IPostWithComments[]>([]);
-
+  
   const fetchPosts = async () => {
     const posts = await getPostsByUser();
     const postsWithComments: IPostWithComments[] = [];
@@ -102,9 +102,9 @@ const Profile: React.FC = () => {
                   />
                 </div>
                 <div className="mt-3 ">
-                  <MDBCardText className="mb-1 h5">253</MDBCardText>
+                    <MDBCardText className="mb-1 h5">{cardsData.length}</MDBCardText>
                   <MDBCardText className="small text-muted mb-0">
-                    Photos
+                    Posts
                   </MDBCardText>
                 </div>
               </MDBCardBody>
@@ -176,6 +176,7 @@ const Profile: React.FC = () => {
                 >
                   {cardsData.map((card) => (
                     <Post
+                      edit={true}
                       key={card._id}
                       username={card.sender}
                       content={card.content}

@@ -28,6 +28,15 @@ export const getPostsByUser = async () => {
   return response.data;
 };
 
+export const getPostById = async (_id: string) => {
+  const response = await axios.get<ICreatePost>(
+    `http://localhost:3000/post/${_id}`,
+    getAuthHeaders()
+  );
+  return response.data;
+};
+
+
 export const createPost = async (postData: ICreatePost) => {
   try {
     const response = await axios.post<ICreatePost>(
@@ -39,6 +48,20 @@ export const createPost = async (postData: ICreatePost) => {
   } catch (e) {
     console.error(e);
     throw new Error("Failed to create post");
+  }
+};
+
+export const updatePost = async (postData: ICreatePost) => {
+  try {
+    const response = await axios.put<ICreatePost>(
+      `http://localhost:3000/post/${postData._id}`,
+      postData,
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (e) {
+    console.error(e);
+    throw new Error("Failed to update post");
   }
 };
 
