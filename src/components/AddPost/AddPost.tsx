@@ -33,6 +33,7 @@ export default function AddPost() {
 
   const onSubmit = async (data: ICreatePost) => {
     const { content } = data;
+
     try {
       const postData: ICreatePost = {
         content: content,

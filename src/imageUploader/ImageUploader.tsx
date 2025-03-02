@@ -56,6 +56,7 @@ function ImageUploader() {
         type="file"
         id="fileInput"
         onChange={handleChange}
+        name="image"
           ></input>
         </div>
       </MDBRow>

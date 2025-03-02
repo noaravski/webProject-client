@@ -30,11 +30,21 @@ export const getPostsByUser = async () => {
 
 export const createPost = async (postData: ICreatePost) => {
   try {
+    const formData = new FormData();
+    formData.append("content", postData.content);
+    formData.append("image", postData.image as Blob);
+
     const response = await axios.post<ICreatePost>(
       "http://localhost:3000/api/post",
-      postData,
-      getAuthHeaders()
+      formData,
+      {
+        headers: {
+          ...getAuthHeaders().headers,
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
+
     return response.data;
   } catch (e) {
     console.error(e);
