@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { createPost } from "../../services/postService";
 import { ICreatePost } from "../../interfaces/post";
+import AddImage from "../AddImage/AddImage";
 
 const MDBTextArea = React.forwardRef<
   unknown,
@@ -28,13 +29,16 @@ export default function AddPost() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { register, handleSubmit } = useForm<ICreatePost>();
+  const [image, setImage] = useState<File>();
 
   const onSubmit = async (data: ICreatePost) => {
     const { content } = data;
     try {
       const postData: ICreatePost = {
         content: content,
+        image: image,
       };
+ 
       const post = await createPost(postData);
       if (post) {
         navigate(`/`);
@@ -66,12 +70,7 @@ export default function AddPost() {
                 style={{ width: "500px", height: "500px" }}
               >
                 <div className="mt-3 mb-4">
-                  <MDBCardImage
-                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
-                    className="rounded-circle"
-                    fluid
-                    style={{ width: "200px" }}
-                  />
+                  <AddImage onFileSelect={(file) => setImage(file)} />
                 </div>
                 <MDBTextArea
                   {...register("content", { required: true })}

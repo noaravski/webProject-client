@@ -20,13 +20,6 @@ const ProfilePic: React.FC<ProfilePicProps> = ({ onFileSelect }) => {
             };
             reader.readAsDataURL(selectedFile);
             onFileSelect(selectedFile);
-            // try {
-            //     const response = await handleUpload(selectedFile);
-            //     console.log(response);
-            //     onFileSelect(response.data.fileUrl);
-            // } catch (error) {
-            //     console.error('Error uploading file', error);
-            // }
         }
     };
 

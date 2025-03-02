@@ -31,9 +31,9 @@ export const getPostsByUser = async () => {
 export const createPost = async (postData: ICreatePost) => {
   try {
     const response = await axios.post<ICreatePost>(
-      "http://localhost:3000/post",
+      "http://localhost:3000/api/post",
       postData,
-      getAuthHeaders(),
+      getAuthHeaders()
     );
     return response.data;
   } catch (e) {
