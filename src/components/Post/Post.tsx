@@ -127,13 +127,12 @@ export default function Post({
         </Box>
         <Typography sx={{ fontWeight: "lg" }}>{username}</Typography>
         {edit && (
-          <div className="d-flex justify-content-center mb-2 mt-2">
+          <Box sx={{ marginLeft: "auto" }}>
             <IconButton
               onClick={handleOpenEdit}
               variant="plain"
               color="neutral"
               size="sm"
-              sx={{ marginLeft: "auto" }}
             >
               <EditIcon />
             </IconButton>
@@ -143,7 +142,7 @@ export default function Post({
               post={post}
               onPostUpdated={handlePostUpdated}
             />
-          </div>
+          </Box>
         )}
       </CardContent>
       <CardOverflow>
