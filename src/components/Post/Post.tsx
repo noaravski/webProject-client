@@ -11,9 +11,15 @@ import IconButton from "@mui/joy/IconButton";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { ICommentResponse, createComment } from "../../services/commentService";
 import CommentsModal from "../../modals/commentsModal";
 import Likes from "../../buttons/Like";
+import EditPost from "../EditPost/EditPost";
+import { getPostById, deletePost } from "../../services/postService";
+import { ICreatePost } from "../../interfaces/post";
+import ConfirmDeletion from "../ConfirmDeletion/ConfirmDeletion";
 
 interface PostProps {
   username: string;
@@ -23,6 +29,9 @@ interface PostProps {
   comments: ICommentResponse[];
   imageUrl?: string;
   _id: string;
+  edit?: boolean;
+  canDelete?: boolean;
+  onPostUpdated?: () => void;
 }
 
 export default function Post({
@@ -32,7 +41,10 @@ export default function Post({
   comments: initialComments,
   _id,
   createdAt,
-  imageUrl
+  imageUrl,
+  edit = false,
+  canDelete = false,
+  onPostUpdated,
 }: PostProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [likes, setLikes] = React.useState(initialLikes);
@@ -43,11 +55,58 @@ export default function Post({
   const openComments = () => setIsOpen(true);
   const closeComments = () => setIsOpen(false);
 
+  const [post, setPost] = React.useState<ICreatePost>({ content, _id });
+
+  const [isEditOpen, setIsEditOpen] = React.useState(false);
+  const handleOpenEdit = () => {
+    setIsEditOpen(true);
+  };
+
+  const handleCloseEdit = () => setIsEditOpen(false);
+
+  const fetchPost = async () => {
+    if (edit) {
+      const postData: ICreatePost = await getPostById(_id);
+      setPost(postData);
+    }
+  };
+
+  const handlePostUpdated = () => {
+    fetchPost();
+    if (onPostUpdated) {
+      onPostUpdated();
+    }
+  };
+
   const handleCommentChange = async () => {
     if (commentContent.trim() !== "") {
       const newComment = await createComment(_id, commentContent);
       setComments([...comments, newComment]);
       setCommentContent("");
+    }
+  };
+
+  const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
+
+  const handleOpenDelete = () => {
+    setIsDeleteOpen(true);
+  };
+
+  const handleCloseDelete = () => {
+    setIsDeleteOpen(false);
+  };
+
+  const handleDeletePost = async () => {
+    try {
+      await deletePost(_id);
+      if (onPostUpdated) {
+        onPostUpdated();
+      }
+      console.log("Post deleted successfully");
+      setPost({ content: "", _id: "" });
+      handleCloseDelete();
+    } catch (error) {
+      console.error("Failed to delete post", error);
     }
   };
 
@@ -102,6 +161,36 @@ export default function Post({
           />
         </Box>
         <Typography sx={{ fontWeight: "lg" }}>{username}</Typography>
+        {(edit || canDelete) && (
+          <Box sx={{ marginLeft: "auto", display: "flex", gap: 1 }}>
+            {edit && (
+              <IconButton
+                onClick={handleOpenEdit}
+                variant="plain"
+                color="neutral"
+                size="sm"
+              >
+                <EditIcon />
+              </IconButton>
+            )}
+            {canDelete && (
+              <IconButton
+                onClick={handleOpenDelete}
+                variant="plain"
+                color="neutral"
+                size="sm"
+              >
+                <DeleteIcon />
+              </IconButton>
+            )}
+            <EditPost
+              open={isEditOpen}
+              handleClose={handleCloseEdit}
+              post={post}
+              onPostUpdated={handlePostUpdated}
+            />
+          </Box>
+        )}
       </CardContent>
       <CardOverflow>
         <AspectRatio ratio="4/3">
@@ -194,6 +283,12 @@ export default function Post({
         isOpen={isOpen}
         onClose={closeComments}
         comments={comments}
+      />
+      <ConfirmDeletion
+        open={isDeleteOpen}
+        onClose={handleCloseDelete}
+        onConfirm={handleDeletePost}
+        message="Are you sure you want to delete this post?"
       />
     </Card>
   );

@@ -28,6 +28,15 @@ export const getPostsByUser = async () => {
   return response.data;
 };
 
+export const getPostById = async (_id: string) => {
+  const response = await axios.get<ICreatePost>(
+    `http://localhost:3000/post/${_id}`,
+    getAuthHeaders()
+  );
+  return response.data;
+};
+
+
 export const createPost = async (postData: ICreatePost) => {
   try {
     const formData = new FormData();
@@ -49,6 +58,33 @@ export const createPost = async (postData: ICreatePost) => {
   } catch (e) {
     console.error(e);
     throw new Error("Failed to create post");
+  }
+};
+
+export const deletePost = async (_id: string) => {
+  try {
+    const response = await axios.delete<ICreatePost>(
+      `http://localhost:3000/post/${_id}`,
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (e) {
+    console.error(e);
+    throw new Error("Failed to delete post");
+  }
+};
+
+export const updatePost = async (postData: ICreatePost) => {
+  try {
+    const response = await axios.put<ICreatePost>(
+      `http://localhost:3000/post/${postData._id}`,
+      postData,
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (e) {
+    console.error(e);
+    throw new Error("Failed to update post");
   }
 };
 
