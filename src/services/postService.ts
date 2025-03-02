@@ -51,6 +51,7 @@ export const createPost = async (postData: ICreatePost) => {
   }
 };
 
+<<<<<<< HEAD
 export const deletePost = async (_id: string) => {
   try {
     const response = await axios.delete<ICreatePost>(
@@ -64,6 +65,8 @@ export const deletePost = async (_id: string) => {
   }
 };
 
+=======
+>>>>>>> cce05e5621560f2def058ee41472a3a07054b342
 export const updatePost = async (postData: ICreatePost) => {
   try {
     const response = await axios.put<ICreatePost>(

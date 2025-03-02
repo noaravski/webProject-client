@@ -48,7 +48,7 @@ const Profile: React.FC = () => {
   const handleCloseEdit = () => setIsEditOpen(false);
 
   const [cardsData, setCardsData] = useState<IPostWithComments[]>([]);
-
+  
   const fetchPosts = async () => {
     const posts = await getPostsByUser();
     const postsWithComments: IPostWithComments[] = [];
