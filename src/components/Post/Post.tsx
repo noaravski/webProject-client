@@ -11,9 +11,13 @@ import IconButton from "@mui/joy/IconButton";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
+import EditIcon from "@mui/icons-material/Edit";
 import { ICommentResponse, createComment } from "../../services/commentService";
 import CommentsModal from "../../modals/commentsModal";
 import Likes from "../../buttons/Like";
+import EditPost from "../EditPost/EditPost";
+import { getPostById } from "../../services/postService";
+import { ICreatePost } from "../../interfaces/post";
 
 interface PostProps {
   username: string;
@@ -22,6 +26,7 @@ interface PostProps {
   likes: number;
   comments: ICommentResponse[];
   _id: string;
+  edit?: boolean;
 }
 
 export default function Post({
@@ -31,6 +36,7 @@ export default function Post({
   comments: initialComments,
   _id,
   createdAt,
+  edit = false,
 }: PostProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [likes, setLikes] = React.useState(initialLikes);
@@ -40,6 +46,26 @@ export default function Post({
 
   const openComments = () => setIsOpen(true);
   const closeComments = () => setIsOpen(false);
+
+  const [post, setPost] = React.useState<ICreatePost>({content, _id});
+
+  const [isEditOpen, setIsEditOpen] = React.useState(false);
+  const handleOpenEdit = () => {
+    setIsEditOpen(true);
+  };
+  
+  const handleCloseEdit = () => setIsEditOpen(false);
+
+  const fetchPost = async () => {
+    if (edit) {
+      const postData: ICreatePost = await getPostById(_id);
+      setPost(postData);
+    }
+  };
+
+  const handlePostUpdated = () => {
+    fetchPost();
+  };
 
   const handleCommentChange = async () => {
     if (commentContent.trim() !== "") {
@@ -100,6 +126,25 @@ export default function Post({
           />
         </Box>
         <Typography sx={{ fontWeight: "lg" }}>{username}</Typography>
+        {edit && (
+          <div className="d-flex justify-content-center mb-2 mt-2">
+            <IconButton
+              onClick={handleOpenEdit}
+              variant="plain"
+              color="neutral"
+              size="sm"
+              sx={{ marginLeft: "auto" }}
+            >
+              <EditIcon />
+            </IconButton>
+            <EditPost
+              open={isEditOpen}
+              handleClose={handleCloseEdit}
+              post={post}
+              onPostUpdated={handlePostUpdated}
+            />
+          </div>
+        )}
       </CardContent>
       <CardOverflow>
         <AspectRatio>

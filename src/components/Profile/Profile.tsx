@@ -176,6 +176,7 @@ const Profile: React.FC = () => {
                 >
                   {cardsData.map((card) => (
                     <Post
+                      edit={true}
                       key={card._id}
                       username={card.sender}
                       content={card.content}
