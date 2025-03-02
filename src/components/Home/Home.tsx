@@ -18,6 +18,7 @@ const ScrollableCards = () => {
 
     const fetchPosts = async () => {
       const posts = await getPosts();
+      console.log(posts);
       const postsWithComments: IPostWithComments[] = [];
 
       for (const post of posts) {
@@ -59,6 +60,7 @@ const ScrollableCards = () => {
             likes={card.likes.length}
             _id={card._id}
             createdAt={card.createdAt}
+            imageUrl={card.imageUrl}
           ></Post>
         ))}
       </div>

@@ -5,13 +5,14 @@ import {
   removeAuthTokens,
 } from "../utils/localStorage";
 import { getAuthHeaders } from "./authClientService";
+import ProfilePic from "../components/ProfilePic/Profilepic";
 
 export { CanceledError };
 
 export interface ILoginResponse {
   accessToken: string;
   refreshToken: string;
-  _id?: string;
+  _id: string;
 }
 
 export interface IRegisterResponse {
@@ -31,15 +32,24 @@ export interface IUpdateResponse {
 export const register = async (
   email: string,
   username: string,
-  password: string
+  password: string,
+  profilePic?: string,
 ) => {
-  await axios.post<IRegisterResponse>("http://localhost:3000/user/", {
-    email,
-    username,
-    password,
-  });
+  const response = await axios.post<IRegisterResponse>(
+    "http://localhost:3000/user/",
+    {
+      email,
+      username,
+      password,
+      profilePic,
+    }
+  );
 
-  await login(username, password);
+  if (response.status !== 201) {
+    return false;
+  }
+
+  return await login(email, password);
 };
 
 export const getUserDetails = async () => {
@@ -53,15 +63,19 @@ export const getUserDetails = async () => {
 
 export const login = async (email: string, password: string) => {
   try {
-    const data = (
-      await axios.post<ILoginResponse>("http://localhost:3000/user/login", {
-        email,
-        password,
-      })
-    ).data;
+    const response = await axios.post<ILoginResponse>("http://localhost:3000/user/login", {
+      email,
+      password,
+    })
+    const data = response.data
 
-    updateTokens(data);
-    return true;
+    if (response.status !== 200) {
+      return false;
+    }
+    else {
+      updateTokens(data);
+      return data;
+    }
   } catch (e) {
     console.log(e);
     return false;

@@ -27,6 +27,7 @@ interface PostProps {
   createdAt: Date;
   likes: number;
   comments: ICommentResponse[];
+  imageUrl?: string;
   _id: string;
   edit?: boolean;
   canDelete?: boolean;
@@ -40,6 +41,7 @@ export default function Post({
   comments: initialComments,
   _id,
   createdAt,
+  imageUrl,
   edit = false,
   canDelete = false,
   onPostUpdated,
@@ -191,11 +193,12 @@ export default function Post({
         )}
       </CardContent>
       <CardOverflow>
-        <AspectRatio>
+        <AspectRatio ratio="4/3">
           <img
-            src="https://picsum.photos/600/400?random=1"
+            src={`http://localhost:3000/images${imageUrl}`}
             alt=""
             loading="lazy"
+            style={{ objectFit: "cover" }}
           />
         </AspectRatio>
       </CardOverflow>
