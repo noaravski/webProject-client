@@ -10,13 +10,13 @@ export interface IPostWithComments {
   comments: ICommentResponse[];
   likes: string[];
   createdAt: Date;
+  imageUrl?:string;
 }
 
 export const getPosts = async () => {
   const response = await axios.get<IPostWithComments[]>(
     "http://localhost:3000/posts"
   );
-  console.log(response.data);
   return response.data;
 };
 

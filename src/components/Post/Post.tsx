@@ -21,6 +21,7 @@ interface PostProps {
   createdAt: Date;
   likes: number;
   comments: ICommentResponse[];
+  imageUrl?: string;
   _id: string;
 }
 
@@ -31,6 +32,7 @@ export default function Post({
   comments: initialComments,
   _id,
   createdAt,
+  imageUrl
 }: PostProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [likes, setLikes] = React.useState(initialLikes);
@@ -102,11 +104,12 @@ export default function Post({
         <Typography sx={{ fontWeight: "lg" }}>{username}</Typography>
       </CardContent>
       <CardOverflow>
-        <AspectRatio>
+        <AspectRatio ratio="4/3">
           <img
-            src="https://picsum.photos/600/400?random=1"
+            src={`http://localhost:3000/images${imageUrl}`}
             alt=""
             loading="lazy"
+            style={{ objectFit: "cover" }}
           />
         </AspectRatio>
       </CardOverflow>
