@@ -58,7 +58,7 @@ const EditPost: React.FC<EditPostProps> = ({
       onPostUpdated();
       handleClose();
       if (updatedPost) {
-        navigate(`/`);
+        navigate(`/profile`);
       }
     } catch (error) {
       console.error("Add post error", error);
