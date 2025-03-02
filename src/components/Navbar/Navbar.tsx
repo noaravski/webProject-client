@@ -6,14 +6,24 @@ import {
   MDBNavbarItem,
   MDBNavbarLink,
   MDBNavbarBrand,
+  MDBBtn,
 } from "mdb-react-ui-kit";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/popcorn.png";
-import "./Navbar.css"; // Import the CSS file
+import "./Navbar.css";
+import { logout } from "../../services/userService";
+
 
 const Navbar = () => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    console.log("User logged out");
+    navigate("/login");
+  };
 
   return (
     <>
@@ -41,16 +51,23 @@ const Navbar = () => {
                 Profile
               </MDBNavbarLink>
             </MDBNavbarItem>
-              <MDBNavbarNav className="align-items-center ms-auto mb-2 mb-lg-0">
-                <MDBNavbarItem >
-                  <MDBNavbarLink
-                    href="/add"
-                    className={currentPath === "/add" ? "active-link" : ""}
-                  >
-                    Upload Post
-                  </MDBNavbarLink>
-                </MDBNavbarItem>
-              </MDBNavbarNav>
+            <MDBNavbarNav className="align-items-center ms-auto mb-2 mb-lg-0">
+              <MDBNavbarItem>
+                <MDBNavbarLink
+                  href="/add"
+                  className={currentPath === "/add" ? "active-link" : ""}
+                >
+                  Upload Post
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+            </MDBNavbarNav>
+            <MDBNavbarNav className="align-items-center ms-auto mb-2 mb-lg-0  justify-content-end">
+              <MDBNavbarItem>
+                <MDBBtn color="danger" onClick={handleLogout}>
+                  Logout
+                </MDBBtn>
+              </MDBNavbarItem>
+            </MDBNavbarNav>
           </MDBNavbarNav>
         </MDBContainer>
       </MDBNavbar>
