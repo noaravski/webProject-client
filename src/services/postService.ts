@@ -51,6 +51,19 @@ export const createPost = async (postData: ICreatePost) => {
   }
 };
 
+export const deletePost = async (_id: string) => {
+  try {
+    const response = await axios.delete<ICreatePost>(
+      `http://localhost:3000/post/${_id}`,
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (e) {
+    console.error(e);
+    throw new Error("Failed to delete post");
+  }
+};
+
 export const updatePost = async (postData: ICreatePost) => {
   try {
     const response = await axios.put<ICreatePost>(

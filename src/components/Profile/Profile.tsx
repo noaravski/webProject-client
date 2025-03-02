@@ -37,6 +37,10 @@ const Profile: React.FC = () => {
     fetchUser();
   };
 
+  const handlePostUpdated = () => {
+    fetchPosts();
+  };
+
   const [isEditOpen, setIsEditOpen] = useState(false);
   const handleOpenEdit = () => {
     setIsEditOpen(true);
@@ -102,7 +106,9 @@ const Profile: React.FC = () => {
                   />
                 </div>
                 <div className="mt-3 ">
-                    <MDBCardText className="mb-1 h5">{cardsData.length}</MDBCardText>
+                  <MDBCardText className="mb-1 h5">
+                    {cardsData.length}
+                  </MDBCardText>
                   <MDBCardText className="small text-muted mb-0">
                     Posts
                   </MDBCardText>
@@ -177,6 +183,7 @@ const Profile: React.FC = () => {
                   {cardsData.map((card) => (
                     <Post
                       edit={true}
+                      canDelete={true}
                       key={card._id}
                       username={card.sender}
                       content={card.content}
@@ -184,6 +191,7 @@ const Profile: React.FC = () => {
                       likes={card.likes.length}
                       _id={card._id}
                       createdAt={card.createdAt}
+                      onPostUpdated={handlePostUpdated}
                     ></Post>
                   ))}
                 </div>
