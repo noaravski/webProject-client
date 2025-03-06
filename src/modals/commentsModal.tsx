@@ -50,24 +50,9 @@ const CommentsModal: React.FC<CommentsModalProps> = ({
         }
       }
       setUserDetails(details);
-      console.log(userDetails);
     };
     fetchUserDetails();
   }, [comments]);
-  // useEffect(() => {
-  //   const fetchUserDetails = async () => {
-  //     const details: { [key: string]: { profilePic: string } } = {};
-  //     for (const comment of comments) {
-  //       const profilePic = await getUserProfilePic(comment.senderId);
-  //       if (profilePic) {
-  //         details[comment.sender] = { profilePic };
-  //       }
-  //     }
-  //     setUserDetails(details);
-  //   };
-  //   console.log(userDetails[comments[0]?]);
-  //   fetchUserDetails();
-  // }, [comments]);
 
   const getTimeAgo = (createdAt) => {
     const now = new Date();

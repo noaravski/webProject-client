@@ -30,7 +30,7 @@ interface PostProps {
   imageUrl?: string;
   _id: string;
   senderId: string;
-  profilePic: string;
+  profilePic?: string;
   edit?: boolean;
   canDelete?: boolean;
   onPostUpdated?: () => void;
@@ -45,6 +45,7 @@ export default function Post({
   createdAt,
   imageUrl,
   profilePic,
+  senderId,
   edit = false,
   canDelete = false,
   onPostUpdated,

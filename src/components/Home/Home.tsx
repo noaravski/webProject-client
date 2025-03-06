@@ -19,7 +19,6 @@ const ScrollableCards = () => {
 
     const fetchPosts = async () => {
       const posts = await getPosts();
-      console.log(posts);
       const postsWithComments: IPostWithComments[] = [];
 
       for (const post of posts) {
@@ -30,7 +29,6 @@ const ScrollableCards = () => {
           ...post,
           comments: comments,
         };
-        console.log(postWithComments);
         postsWithComments.push(postWithComments);
       }
       postsWithComments.sort(

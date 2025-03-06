@@ -25,6 +25,7 @@ const Profile: React.FC = () => {
 
   const fetchUser = async () => {
     const userData = await getUserDetails();
+    console.log(userData);
 
     setUser(userData);
   };
@@ -49,7 +50,7 @@ const Profile: React.FC = () => {
   const handleCloseEdit = () => setIsEditOpen(false);
 
   const [cardsData, setCardsData] = useState<IPostWithComments[]>([]);
-  
+
   const fetchPosts = async () => {
     const posts = await getPostsByUser();
     const postsWithComments: IPostWithComments[] = [];
@@ -67,6 +68,7 @@ const Profile: React.FC = () => {
       };
 
       postsWithComments.push(postWithComments);
+      console.log(postsWithComments);
     }
     setCardsData(postsWithComments);
   };
@@ -89,7 +91,7 @@ const Profile: React.FC = () => {
             <MDBCard className="mb-4">
               <MDBCardBody>
                 <MDBCardImage
-                  src={`http://localhost:3000/images/${user?._id}/${user?.imageUrl}`}
+                  src={`http://localhost:3000/images/${user?._id}/${user?.profilePic}`}
                   alt="avatar"
                   className="rounded-circle"
                   style={{ width: "300px", height: "320px" }}
@@ -191,7 +193,9 @@ const Profile: React.FC = () => {
                       comments={card.comments}
                       likes={card.likes.length}
                       _id={card._id}
+                      imageUrl={"/" + user?._id + "/" + card.imageUrl}
                       createdAt={card.createdAt}
+                      profilePic={"/" + user?._id + "/" + user?.profilePic}
                       onPostUpdated={handlePostUpdated}
                     ></Post>
                   ))}
