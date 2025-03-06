@@ -6,6 +6,9 @@ import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import { ICommentResponse } from "../services/commentService";
 import Avatar from "@mui/joy/Avatar";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { getUserProfilePic } from "../services/commentService";
 
 const style = {
   position: "absolute",
@@ -34,6 +37,37 @@ const CommentsModal: React.FC<CommentsModalProps> = ({
   const sortedComments = [...comments].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
+
+  const [userDetails, setUserDetails] = useState<{ [key: string]: any }>({});
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      const details: { [key: string]: { profilePic: string } } = {};
+      for (const comment of comments) {
+        const profilePic = await getUserProfilePic(comment.senderId);
+        if (profilePic) {
+          details[comment.sender] = { profilePic };
+        }
+      }
+      setUserDetails(details);
+      console.log(userDetails);
+    };
+    fetchUserDetails();
+  }, [comments]);
+  // useEffect(() => {
+  //   const fetchUserDetails = async () => {
+  //     const details: { [key: string]: { profilePic: string } } = {};
+  //     for (const comment of comments) {
+  //       const profilePic = await getUserProfilePic(comment.senderId);
+  //       if (profilePic) {
+  //         details[comment.sender] = { profilePic };
+  //       }
+  //     }
+  //     setUserDetails(details);
+  //   };
+  //   console.log(userDetails[comments[0]?]);
+  //   fetchUserDetails();
+  // }, [comments]);
 
   const getTimeAgo = (createdAt) => {
     const now = new Date();
@@ -77,31 +111,33 @@ const CommentsModal: React.FC<CommentsModalProps> = ({
             </Typography>
             <div className="divider d-flex align-items-center mb-4 mt-2"></div>
             {sortedComments.map((comment) => (
-              <Box
+                <Box
                 key={comment._id}
                 sx={{ mt: 2, display: "flex", alignItems: "center" }}
-              >
+                >
                 <Avatar
                   size="sm"
-                  src="https://i.pravatar.cc/30"
+                  src={`http://localhost:3000/images/${
+                  userDetails[comment.sender]?.profilePic || "defaultProfilePic.jpg"
+                  }`}
                   sx={{
-                    border: "2px solid",
-                    borderColor: "background.body",
-                    mr: 2,
+                  border: "2px solid",
+                  borderColor: "background.body",
+                  mr: 2,
                   }}
                 />
                 <Box>
                   <Typography variant="body2" component="p">
-                    <span style={{ fontWeight: "bold" }}>
-                      {comment.sender}:
-                    </span>{" "}
-                    {comment.content}
+                  <span style={{ fontWeight: "bold" }}>
+                    {comment.sender}:
+                  </span>{" "}
+                  {comment.content}
                   </Typography>
                   <Typography variant="caption" component="p">
-                    {getTimeAgo(comment.createdAt)}
+                  {getTimeAgo(comment.createdAt)}
                   </Typography>
                 </Box>
-              </Box>
+                </Box>
             ))}
           </Box>
         </Fade>

@@ -59,18 +59,15 @@ function SignUp() {
         email,
         username,
         password,
-        profilePic?.name
+        profilePic as File
       );
-      if (profilePic !== undefined && res) {
-        const uploadResponse = await handleUpload(profilePic, res._id);
-        if (uploadResponse.status === 200) {
-          console.log("User registered and logined successfully");
-          navigate("/");
-        } else {
-          setErrorMessage(
-            "Registration failed. Please check your details and ensure your username is unique."
-          );
-        }
+      if (res) {
+        console.log("User registered and logined successfully");
+        navigate("/");
+      } else {
+        setErrorMessage(
+          "Registration failed. Please check your details and ensure your username is unique."
+        );
       }
     } catch (error) {
       console.error("Register error", error);

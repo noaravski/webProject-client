@@ -6,6 +6,7 @@ import {
 } from "../utils/localStorage";
 import { getAuthHeaders } from "./authClientService";
 import ProfilePic from "../components/ProfilePic/Profilepic";
+import getUserProfilePic from "./fileService";
 
 export { CanceledError };
 
@@ -33,15 +34,21 @@ export const register = async (
   email: string,
   username: string,
   password: string,
-  profilePic?: string,
+  profilePic?: File
 ) => {
+  const formData = new FormData();
+  formData.append("email", email);
+  formData.append("username", username);
+  formData.append("password", password);
+  formData.append("image", profilePic as Blob);
+
   const response = await axios.post<IRegisterResponse>(
-    "http://localhost:3000/user/",
+    "http://localhost:3000/user",
+    formData,
     {
-      email,
-      username,
-      password,
-      profilePic,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     }
   );
 
@@ -53,26 +60,26 @@ export const register = async (
 };
 
 export const getUserDetails = async () => {
-  const response = await axios.get(
-    "http://localhost:3000/user/details",
-    getAuthHeaders()
-  );
-
+  const response = await axios.get("http://localhost:3000/user/details", {
+    ...getAuthHeaders(),
+  });
   return response.data;
 };
 
 export const login = async (email: string, password: string) => {
   try {
-    const response = await axios.post<ILoginResponse>("http://localhost:3000/user/login", {
-      email,
-      password,
-    })
-    const data = response.data
+    const response = await axios.post<ILoginResponse>(
+      "http://localhost:3000/user/login",
+      {
+        email,
+        password,
+      }
+    );
+    const data = response.data;
 
     if (response.status !== 200) {
       return false;
-    }
-    else {
+    } else {
       updateTokens(data);
       return data;
     }
@@ -135,4 +142,11 @@ export const updateUser = async (
     }
   );
 };
-export default { register, login, logout, googleLogin, getUserDetails, updateUser };
+export default {
+  register,
+  login,
+  logout,
+  googleLogin,
+  getUserDetails,
+  updateUser,
+};

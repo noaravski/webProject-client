@@ -25,6 +25,7 @@ const Profile: React.FC = () => {
 
   const fetchUser = async () => {
     const userData = await getUserDetails();
+
     setUser(userData);
   };
 
@@ -84,10 +85,10 @@ const Profile: React.FC = () => {
             <MDBCard className="mb-4">
               <MDBCardBody>
                 <MDBCardImage
-                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                  src={`http://localhost:3000/images/${user?._id}/${user?.imageUrl}`}
                   alt="avatar"
                   className="rounded-circle"
-                  style={{ width: "300px" }}
+                  style={{ width: "300px", height: "320px" }}
                   fluid
                 />
                 <div className="d-flex justify-content-center mb-2 mt-2">

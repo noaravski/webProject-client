@@ -6,6 +6,7 @@ import { getCommentsByPost } from "../../services/commentService";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IPostWithComments } from "../../services/postService";
+import { getUserProfilePic } from "../../services/commentService";
 
 const ScrollableCards = () => {
   const [cardsData, setCardsData] = useState<IPostWithComments[]>([]);
@@ -23,11 +24,13 @@ const ScrollableCards = () => {
 
       for (const post of posts) {
         const comments = await getCommentsByPost(post._id);
+        // const profilePic = await getUserProfilePic(post.senderId);
+        
         const postWithComments: IPostWithComments = {
           ...post,
           comments: comments,
         };
-
+        console.log(postWithComments);
         postsWithComments.push(postWithComments);
       }
       postsWithComments.sort(
@@ -61,6 +64,7 @@ const ScrollableCards = () => {
             _id={card._id}
             createdAt={card.createdAt}
             imageUrl={card.imageUrl}
+            profilePic={card.profilePic}
           ></Post>
         ))}
       </div>

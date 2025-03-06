@@ -23,6 +23,8 @@ interface PostProps {
   comments: ICommentResponse[];
   imageUrl?: string;
   _id: string;
+  senderId: string;
+  profilePic: string;
 }
 
 export default function Post({
@@ -32,7 +34,8 @@ export default function Post({
   comments: initialComments,
   _id,
   createdAt,
-  imageUrl
+  imageUrl,
+  profilePic,
 }: PostProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [likes, setLikes] = React.useState(initialLikes);
@@ -94,7 +97,7 @@ export default function Post({
         >
           <Avatar
             size="sm"
-            src="https://i.pravatar.cc/30"
+            src={`http://localhost:3000/images/${profilePic}`}
             sx={{
               border: "2px solid",
               borderColor: "background.body",

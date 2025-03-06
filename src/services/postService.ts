@@ -11,6 +11,8 @@ export interface IPostWithComments {
   likes: string[];
   createdAt: Date;
   imageUrl?:string;
+  senderId:string;
+  profilePic:string;
 }
 
 export const getPosts = async () => {
