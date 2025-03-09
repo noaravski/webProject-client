@@ -36,6 +36,7 @@ const ScrollableCards = () => {
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
       setCardsData(postsWithComments);
+      console.log(postsWithComments);
     };
     fetchPosts();
   }, []);
@@ -61,8 +62,8 @@ const ScrollableCards = () => {
             likes={card.likes.length}
             _id={card._id}
             createdAt={card.createdAt}
-            imageUrl={card.imageUrl}
-            profilePic={card.profilePic}
+            imageUrl={"/" + card.userId + "/" + card.imageUrl}
+            profilePic={"/" + card.userId + "/" + card.profilePic}
           ></Post>
         ))}
       </div>

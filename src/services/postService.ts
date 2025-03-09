@@ -11,7 +11,7 @@ export interface IPostWithComments {
   likes: string[];
   createdAt: Date;
   imageUrl?:string;
-  senderId:string;
+  userId:string;
   profilePic:string;
 }
 

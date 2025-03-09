@@ -91,7 +91,10 @@ const Profile: React.FC = () => {
             <MDBCard className="mb-4">
               <MDBCardBody>
                 <MDBCardImage
-                  src={`http://localhost:3000/images/${user?._id}/${user?.profilePic}`}
+                  src={`http://localhost:3000/images/${user?._id.replace(
+                    /\//g,
+                    ""
+                  )}/${user?.profilePic.replace(/\//g, "")}`}
                   alt="avatar"
                   className="rounded-circle"
                   style={{ width: "300px", height: "320px" }}
@@ -105,6 +108,7 @@ const Profile: React.FC = () => {
                     open={isEditOpen}
                     handleClose={handleCloseEdit}
                     user={user}
+                    profilePicUrl={`http://localhost:3000/images/${user?._id}/${user?.profilePic}`}
                     onProfileUpdated={handleProfileUpdated}
                   />
                 </div>

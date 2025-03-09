@@ -117,27 +117,29 @@ export const updateUser = async (
   email: string,
   username: string,
   description?: string,
-  image?: string
+  image?: File
 ) => {
-  const payload: Partial<IUpdateResponse> = {
-    email,
-    username,
-  };
-
-  if (description) {
-    payload.description = description;
+  const formData = new FormData();
+  if (email) {
+    formData.append("email", email);
   }
-
+  if (username) {
+    formData.append("username", username);
+  }
+  if (description) {
+    formData.append("description", description);
+  }
   if (image) {
-    payload.image = image;
+    formData.append("image", image as Blob);
   }
 
   await axios.put<IUpdateResponse>(
     `http://localhost:3000/user/${id}`,
-    payload,
+    formData,
     {
       headers: {
-        Authorization: `Bearer ${getAuthTokenByName("accessToken")}`,
+        ...getAuthHeaders().headers,
+        "Content-Type": "multipart/form-data",
       },
     }
   );

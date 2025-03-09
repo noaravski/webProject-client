@@ -199,7 +199,7 @@ export default function Post({
       <CardOverflow>
         <AspectRatio ratio="4/3">
           <img
-            src={`http://localhost:3000/images${imageUrl}`}
+            src={`http://localhost:3000/images/${imageUrl}`}
             alt=""
             loading="lazy"
             style={{ objectFit: "cover" }}

@@ -15,11 +15,16 @@ import {
   MDBTextArea as OriginalMDBTextArea,
 } from "mdb-react-ui-kit";
 import { IUser } from "../../interfaces/user";
-
+import ImageUploader from "../../imageUploader/ImageUploader";
+import ProfilePic from "../ProfilePic/Profilepic";
+import { useState } from "react";
+import { getUserDetails } from "../../services/userService";
+import axios from "axios";
 interface EditProfileModalProps {
   open: boolean;
   handleClose: () => void;
   user: IUser | null;
+  profilePicUrl: string;
   onProfileUpdated: () => void;
 }
 
@@ -48,6 +53,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   open,
   handleClose,
   user,
+  profilePicUrl,
   onProfileUpdated,
 }) => {
   const {
@@ -57,11 +63,24 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     formState: { errors },
   } = useForm<updatedUserData>({});
 
+  const [profilePic, setProfilePic] = useState<File | undefined>(null);
+
   const onSubmit = async (data: updatedUserData) => {
     const { email, username, description } = data;
+
     try {
       if (user?._id) {
-        await updateUser(user?._id, email, username, description);
+        const profilePicFile = await axios.get(profilePicUrl, { responseType: 'blob' }).then(response => {
+          const blob = response.data;
+          return new File([blob], "profilePic.jpg", { type: "image/jpeg" });
+        });
+        await updateUser(
+          user?._id,
+          email,
+          username,
+          description,
+          profilePic || profilePicFile
+        );
         onProfileUpdated();
         handleClose();
       } else {
@@ -102,11 +121,9 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                   <MDBCardBody className="text-center">
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <div className="mt-3 mb-4">
-                        <MDBCardImage
-                          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
-                          className="rounded-circle"
-                          fluid
-                          style={{ width: "150px" }}
+                        <ProfilePic
+                          onFileSelect={(file) => setProfilePic(file)}
+                          defaultImage={profilePicUrl}
                         />
                       </div>
                       <MDBInput
