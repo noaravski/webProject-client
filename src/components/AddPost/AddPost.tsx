@@ -58,7 +58,7 @@ export default function AddPost() {
   const handleAiRequest = async () => {
     const content = getValues("content"); // Get the current value of the textarea
     if (!content) {
-      setErrorMessage("Please enter some text before using AI suggestions.");
+      setErrorMessage("Please enter text before using AI suggestions.");
       return;
     }
 
@@ -107,10 +107,12 @@ export default function AddPost() {
                     size="lg"
                     maxLength={720}
                     placeholder={`Enter your Description here...
-          Or get AI recommendation by entering movie name`}
+Or get AI recommendation by entering movie name`}
                     value={textareaValue} // Bind the textarea value to the state
-                    style={{ height: "150px" }} // Increase the height of the textarea
-                  onChange={(e) => setTextareaValue(e.target.value)} // Update state on user input
+                    onChange={(e) => {
+                      setTextareaValue(e.target.value); // Update state on user input
+                      setErrorMessage(null); // Clear error message on user input
+                    }}
                 >
                   <button
                     className={`btn ${
