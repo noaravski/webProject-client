@@ -54,6 +54,12 @@ function SignUp() {
 
   const onSubmit = async (data: RegisterData) => {
     try {
+      
+      if (profilePic && profilePic.size > 5 * 1024 * 1024) {
+        setErrorMessage("Profile picture is too large. Maximum size is 5MB.");
+        return;
+      }
+
       const { email, username, password } = data;
       const res = await registerUser(
         email,
@@ -61,6 +67,7 @@ function SignUp() {
         password,
         profilePic as File
       );
+
       if (res) {
         navigate("/");
       } else {
