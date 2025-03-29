@@ -39,7 +39,6 @@ const ScrollableCards = () => {
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
       setCardsData(postsWithComments);
-      console.log(postsWithComments);
     };
     fetchPosts();
   }, []);

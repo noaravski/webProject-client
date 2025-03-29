@@ -62,7 +62,6 @@ function SignUp() {
         profilePic as File
       );
       if (res) {
-        console.log("User registered and logined successfully");
         navigate("/");
       } else {
         setErrorMessage(
@@ -76,8 +75,6 @@ function SignUp() {
       );
     }
   };
-
-  // const { register, handleSubmit } = useForm<RegisterData>({});
 
   return (
     <MDBContainer className="my-5">

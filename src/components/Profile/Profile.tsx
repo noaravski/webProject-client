@@ -25,8 +25,6 @@ const Profile: React.FC = () => {
 
   const fetchUser = async () => {
     const userData = await getUserDetails();
-    console.log(userData);
-
     setUser(userData);
   };
 
@@ -68,7 +66,6 @@ const Profile: React.FC = () => {
       };
 
       postsWithComments.push(postWithComments);
-      console.log(postsWithComments);
     }
     setCardsData(postsWithComments);
   };

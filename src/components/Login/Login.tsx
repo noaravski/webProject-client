@@ -48,7 +48,6 @@ function Login() {
     const { email, password } = data;
     try {
       const user = await login(email, password);
-      console.log("user", user);
       if (user) {
         navigate(`/`);
       }

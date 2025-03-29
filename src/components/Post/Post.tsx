@@ -107,7 +107,6 @@ export default function Post({
       if (onPostUpdated) {
         onPostUpdated();
       }
-      console.log("Post deleted successfully");
       setPost({ content: "", _id: "" });
       handleCloseDelete();
     } catch (error) {

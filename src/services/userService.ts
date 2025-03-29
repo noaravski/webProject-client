@@ -84,7 +84,6 @@ export const login = async (email: string, password: string) => {
       return data;
     }
   } catch (e) {
-    console.log(e);
     return false;
   }
 };

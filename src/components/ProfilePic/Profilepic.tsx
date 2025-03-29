@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import noPic from "../../assets/noProfilePic.png";
-import handleUpload from "../../services/fileService";
 
 interface ProfilePicProps {
-  // onFileSelect: (fileUrl: string) => void;
   onFileSelect: (file: File) => void;
   defaultImage?: string;
 }
