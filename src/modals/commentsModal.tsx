@@ -35,7 +35,7 @@ const CommentsModal: React.FC<CommentsModalProps> = ({
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
-  const getTimeAgo = (createdAt) => {
+  const getTimeAgo = (createdAt: string | Date) => {
     const now = new Date();
     const diff = now.getTime() - new Date(createdAt).getTime();
     const diffInHours = Math.floor(diff / (1000 * 60 * 60));

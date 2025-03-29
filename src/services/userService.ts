@@ -28,12 +28,14 @@ export interface IUpdateResponse {
   image?: string;
 }
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 export const register = async (
   email: string,
   username: string,
   password: string
 ) => {
-  await axios.post<IRegisterResponse>("http://localhost:3000/user/", {
+  await axios.post<IRegisterResponse>(backendUrl + "/user/", {
     email,
     username,
     password,
@@ -44,7 +46,7 @@ export const register = async (
 
 export const getUserDetails = async () => {
   const response = await axios.get(
-    "http://localhost:3000/user/details",
+    backendUrl + "/user/details",
     getAuthHeaders()
   );
 
@@ -54,7 +56,7 @@ export const getUserDetails = async () => {
 export const login = async (email: string, password: string) => {
   try {
     const data = (
-      await axios.post<ILoginResponse>("http://localhost:3000/user/login", {
+      await axios.post<ILoginResponse>(backendUrl + "/user/login", {
         email,
         password,
       })
@@ -70,7 +72,7 @@ export const login = async (email: string, password: string) => {
 
 export const logout = async () => {
   await axios.post<IRegisterResponse>(
-    "http://localhost:3000/user/logout",
+    backendUrl + "/user/logout",
     {},
     getAuthHeaders()
   );
@@ -79,12 +81,9 @@ export const logout = async () => {
 
 export const googleLogin = async (credential?: string) => {
   const tokens = (
-    await axios.post<ILoginResponse>(
-      "http://localhost:3000/user/login/google",
-      {
-        credential,
-      }
-    )
+    await axios.post<ILoginResponse>(backendUrl + "/user/login/google", {
+      credential,
+    })
   ).data;
 
   updateTokens(tokens);
@@ -111,14 +110,10 @@ export const updateUser = async (
     payload.image = image;
   }
 
-  await axios.put<IUpdateResponse>(
-    `http://localhost:3000/user/${id}`,
-    payload,
-    {
-      headers: {
-        Authorization: `Bearer ${getAuthTokenByName("accessToken")}`,
-      },
-    }
-  );
+  await axios.put<IUpdateResponse>(backendUrl + `/user/${id}`, payload, {
+    headers: {
+      Authorization: `Bearer ${getAuthTokenByName("accessToken")}`,
+    },
+  });
 };
 export default { register, login, logout, googleLogin, getUserDetails, updateUser };

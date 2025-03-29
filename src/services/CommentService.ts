@@ -8,9 +8,11 @@ export interface ICommentResponse {
   createdAt: "string";
 }
 
-export const getCommentsByPost = async (postId) => {
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+export const getCommentsByPost = async (postId: string) => {
   const response = await axios.get<ICommentResponse[]>(
-    "http://localhost:3000/comments/" + postId
+    backendUrl + "/comments/" + postId
   );
 
   return response.data;
@@ -22,7 +24,7 @@ export const createComment = async (
 ) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/add-comment`,
+      backendUrl + `/add-comment`,
       {
         postId: postId,
         content: content,
