@@ -104,16 +104,6 @@ const Profile: React.FC = () => {
                   style={{ width: "300px", height: "320px" }}
                   fluid
                 />
-                {/* <MDBCardImage
-                  src={`http://localhost:3000/images/${user?._id.replace(
-                    /\//g,
-                    ""
-                  )}/${user?.profilePic.replace(/\//g, "")}`}
-                  alt="avatar"
-                  className="rounded-circle"
-                  style={{ width: "300px", height: "320px" }}
-                  fluid
-                /> */}
                 <div className="d-flex justify-content-center mb-2 mt-2">
                   <MDBBtn outline className="ms-1" onClick={handleOpenEdit}>
                   Edit Profile
