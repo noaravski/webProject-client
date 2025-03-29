@@ -48,9 +48,10 @@ function Login() {
     const { email, password } = data;
     try {
       const user = await login(email, password);
-      console.log("user", user);
       if (user) {
         navigate(`/`);
+      } else {
+        setErrorMessage(`Login failed. Please check your email and password.`);
       }
     } catch (error) {
       console.error("Login error", error);
@@ -66,7 +67,8 @@ function Login() {
             <MDBCardImage
               src={movie}
               alt="login form"
-              className="rounded-start w-100"
+              className="rounded-start w-100 h-100"
+              style={{ objectFit: "cover" }}
             />
           </MDBCol>
 
@@ -82,8 +84,7 @@ function Login() {
                   onSuccess={googleResponseMessage}
                   onError={googleErrorMessage}
                   click_listener={() => googleResponseMessage}
-                >
-                </GoogleLogin>
+                ></GoogleLogin>
               </div>
               <div className="divider d-flex align-items-center mb-4 mt-2">
                 <p className="text-center fw-bold mx-3 mt-0 mb-0">OR</p>

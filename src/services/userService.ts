@@ -11,7 +11,7 @@ export { CanceledError };
 export interface ILoginResponse {
   accessToken: string;
   refreshToken: string;
-  _id?: string;
+  _id: string;
 }
 
 export interface IRegisterResponse {
@@ -33,15 +33,30 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 export const register = async (
   email: string,
   username: string,
-  password: string
+  password: string,
+  profilePic?: File
 ) => {
-  await axios.post<IRegisterResponse>(backendUrl + "/user/", {
-    email,
-    username,
-    password,
-  });
+  const formData = new FormData();
+  formData.append("email", email);
+  formData.append("username", username);
+  formData.append("password", password);
+  formData.append("image", profilePic as Blob);
 
-  await login(username, password);
+  const response = await axios.post<IRegisterResponse>(
+    backendUrl + "/user",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  if (response.status !== 201) {
+    return false;
+  }
+
+  return await login(email, password);
 };
 
 export const getUserDetails = async () => {
@@ -55,17 +70,22 @@ export const getUserDetails = async () => {
 
 export const login = async (email: string, password: string) => {
   try {
-    const data = (
-      await axios.post<ILoginResponse>(backendUrl + "/user/login", {
+    const response = await axios.post<ILoginResponse>(
+      backendUrl + "/user/login",
+      {
         email,
         password,
-      })
-    ).data;
+      }
+    );
+    const data = response.data;
 
-    updateTokens(data);
-    return true;
+    if (response.status !== 200) {
+      return false;
+    } else {
+      updateTokens(data);
+      return data;
+    }
   } catch (e) {
-    console.log(e);
     return false;
   }
 };
@@ -95,25 +115,34 @@ export const updateUser = async (
   email: string,
   username: string,
   description?: string,
-  image?: string
+  image?: File
 ) => {
-  const payload: Partial<IUpdateResponse> = {
-    email,
-    username,
-  };
-
+  const formData = new FormData();
+  if (email) {
+    formData.append("email", email);
+  }
+  if (username) {
+    formData.append("username", username);
+  }
   if (description) {
-    payload.description = description;
+    formData.append("description", description);
   }
-
   if (image) {
-    payload.image = image;
+    formData.append("image", image as Blob);
   }
 
-  await axios.put<IUpdateResponse>(backendUrl + `/user/${id}`, payload, {
+  await axios.put<IUpdateResponse>(backendUrl + `/user/${id}`, formData, {
     headers: {
+      ...getAuthHeaders().headers,
       Authorization: `Bearer ${getAuthTokenByName("accessToken")}`,
     },
   });
 };
-export default { register, login, logout, googleLogin, getUserDetails, updateUser };
+export default {
+  register,
+  login,
+  logout,
+  googleLogin,
+  getUserDetails,
+  updateUser,
+};

@@ -3,5 +3,6 @@ export interface IUser {
   email: string;
   username: string;
   description?: string;
-  image?: string;
+  imageUrl?: string;
+  profilePic?: string;
 }

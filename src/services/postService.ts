@@ -10,13 +10,15 @@ export interface IPostWithComments {
   comments: ICommentResponse[];
   likes: string[];
   createdAt: Date;
+  imageUrl?:string;
+  userId:string;
+  profilePic:string;
 }
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export const getPosts = async () => {
   const response = await axios.get<IPostWithComments[]>(backendUrl + "/posts");
-  console.log(response.data);
   return response.data;
 };
 
@@ -38,11 +40,21 @@ export const getPostById = async (_id: string) => {
 
 export const createPost = async (postData: ICreatePost) => {
   try {
+    const formData = new FormData();
+    formData.append("content", postData.content);
+    formData.append("image", postData.image as Blob);
+
     const response = await axios.post<ICreatePost>(
       backendUrl + "/post",
-      postData,
-      getAuthHeaders()
+      formData,
+      {
+        headers: {
+          ...getAuthHeaders().headers,
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
+
     return response.data;
   } catch (e) {
     console.error(e);

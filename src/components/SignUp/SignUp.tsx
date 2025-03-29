@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Profiler, useState } from "react";
 import "./SignUp.css";
 import {
   MDBBtn,
@@ -19,16 +19,21 @@ import {
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import ProfilePic from "../ProfilePic/Profilepic";
+import handleUpload from "../../services/fileService";
 
 type RegisterData = {
   email: string;
   username: string;
   password: string;
+  profilePic?: File;
 };
 
 function SignUp() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [profilePic, setProfilePic] = useState<File | undefined>(null);
+  const { register, handleSubmit } = useForm<RegisterData>();
 
   const googleResponseMessage = async (
     credentialResponse: CredentialResponse
@@ -49,29 +54,47 @@ function SignUp() {
 
   const onSubmit = async (data: RegisterData) => {
     try {
+      
+      if (profilePic && profilePic.size > 5 * 1024 * 1024) {
+        setErrorMessage("Profile picture is too large. Maximum size is 5MB.");
+        return;
+      }
+
       const { email, username, password } = data;
-      await registerUser(email, username, password);
-      navigate("/");
+      const res = await registerUser(
+        email,
+        username,
+        password,
+        profilePic as File
+      );
+
+      if (res) {
+        navigate("/");
+      } else {
+        setErrorMessage(
+          "Registration failed. Please check your details and ensure your username is unique."
+        );
+      }
     } catch (error) {
       console.error("Register error", error);
-      setErrorMessage("Registration failed. Please check your details and ensure your username is unique.");
+      setErrorMessage(
+        "Registration failed. Please check your details and ensure your username is unique."
+      );
     }
   };
-
-  const { register, handleSubmit } = useForm<RegisterData>({});
 
   return (
     <MDBContainer className="my-5">
       <MDBCard>
         <MDBRow className="g-0">
-            <MDBCol md="6" className="d-none d-md-flex">
+          <MDBCol md="6" className="d-none d-md-flex">
             <MDBCardImage
               src={movie}
               alt="login form"
               className="rounded-start w-100 h-100"
               style={{ objectFit: "cover" }}
             />
-            </MDBCol>
+          </MDBCol>
 
           <MDBCol md="6">
             <MDBCardBody className="d-flex flex-column">
@@ -84,14 +107,14 @@ function SignUp() {
                   width={300}
                   onSuccess={googleResponseMessage}
                   onError={googleErrorMessage}
-                >
-                </GoogleLogin>
+                ></GoogleLogin>
               </div>
 
               <div className="divider d-flex align-items-center mb-4 mt-2">
                 <p className="text-center fw-bold mx-3 mt-0 mb-0">OR</p>
               </div>
               <form onSubmit={handleSubmit(onSubmit)}>
+                <ProfilePic onFileSelect={(file) => setProfilePic(file)} />
                 <MDBRow>
                   <MDBCol col="6">
                     <MDBInput
@@ -129,6 +152,7 @@ function SignUp() {
                   color="dark"
                   size="lg"
                   style={{ marginTop: "10px" }}
+                  type="submit"
                 >
                   Sign Up
                 </MDBBtn>
