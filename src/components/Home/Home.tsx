@@ -23,7 +23,10 @@ const ScrollableCards = () => {
 
       for (const post of posts) {
         const comments = await getCommentsByPost(post._id);
-        // const profilePic = await getUserProfilePic(post.senderId);
+
+        if (!post.profilePic.includes('https')) {
+          post.profilePic = "/" + post.userId + "/" + post.profilePic;
+        }
         
         const postWithComments: IPostWithComments = {
           ...post,
@@ -63,7 +66,7 @@ const ScrollableCards = () => {
             _id={card._id}
             createdAt={card.createdAt}
             imageUrl={"/" + card.userId + "/" + card.imageUrl}
-            profilePic={"/" + card.userId + "/" + card.profilePic}
+            profilePic={card.profilePic}
           ></Post>
         ))}
       </div>

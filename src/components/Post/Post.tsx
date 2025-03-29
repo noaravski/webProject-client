@@ -75,6 +75,7 @@ export default function Post({
     }
   };
 
+
   const handlePostUpdated = () => {
     fetchPost();
     if (onPostUpdated) {
@@ -157,7 +158,11 @@ export default function Post({
         >
           <Avatar
             size="sm"
-            src={`http://localhost:3000/images/${profilePic}`}
+            src={
+              profilePic?.includes("https")
+                ? profilePic
+                : `http://localhost:3000/images/${profilePic}`
+            }
             sx={{
               border: "2px solid",
               borderColor: "background.body",
