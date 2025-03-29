@@ -116,14 +116,21 @@ const Profile: React.FC = () => {
                 /> */}
                 <div className="d-flex justify-content-center mb-2 mt-2">
                   <MDBBtn outline className="ms-1" onClick={handleOpenEdit}>
-                    Edit Profile
+                  Edit Profile
                   </MDBBtn>
                   <EditProfileModal
-                    open={isEditOpen}
-                    handleClose={handleCloseEdit}
-                    user={user}
-                    profilePicUrl={`http://localhost:3000/images/${user?._id}/${user?.profilePic}`}
-                    onProfileUpdated={handleProfileUpdated}
+                  open={isEditOpen}
+                  handleClose={handleCloseEdit}
+                  user={user}
+                  profilePicUrl={
+                    user?.profilePic?.includes("https")
+                    ? user?.profilePic
+                    : `http://localhost:3000/images/${(user?._id ?? "").replace(
+                      /\//g,
+                      ""
+                      )}/${(user?.profilePic ?? "").replace(/\//g, "")}`
+                  }
+                  onProfileUpdated={handleProfileUpdated}
                   />
                 </div>
                 <div className="mt-3 ">
