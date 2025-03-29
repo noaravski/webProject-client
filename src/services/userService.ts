@@ -5,13 +5,15 @@ import {
   removeAuthTokens,
 } from "../utils/localStorage";
 import { getAuthHeaders } from "./authClientService";
+import ProfilePic from "../components/ProfilePic/Profilepic";
+import getUserProfilePic from "./fileService";
 
 export { CanceledError };
 
 export interface ILoginResponse {
   accessToken: string;
   refreshToken: string;
-  _id?: string;
+  _id: string;
 }
 
 export interface IRegisterResponse {
@@ -31,39 +33,57 @@ export interface IUpdateResponse {
 export const register = async (
   email: string,
   username: string,
-  password: string
+  password: string,
+  profilePic?: File
 ) => {
-  await axios.post<IRegisterResponse>("http://localhost:3000/user/", {
-    email,
-    username,
-    password,
-  });
+  const formData = new FormData();
+  formData.append("email", email);
+  formData.append("username", username);
+  formData.append("password", password);
+  formData.append("image", profilePic as Blob);
 
-  await login(username, password);
+  const response = await axios.post<IRegisterResponse>(
+    "http://localhost:3000/user",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  if (response.status !== 201) {
+    return false;
+  }
+
+  return await login(email, password);
 };
 
 export const getUserDetails = async () => {
-  const response = await axios.get(
-    "http://localhost:3000/user/details",
-    getAuthHeaders()
-  );
-
+  const response = await axios.get("http://localhost:3000/user/details", {
+    ...getAuthHeaders(),
+  });
   return response.data;
 };
 
 export const login = async (email: string, password: string) => {
   try {
-    const data = (
-      await axios.post<ILoginResponse>("http://localhost:3000/user/login", {
+    const response = await axios.post<ILoginResponse>(
+      "http://localhost:3000/user/login",
+      {
         email,
         password,
-      })
-    ).data;
+      }
+    );
+    const data = response.data;
 
-    updateTokens(data);
-    return true;
+    if (response.status !== 200) {
+      return false;
+    } else {
+      updateTokens(data);
+      return data;
+    }
   } catch (e) {
-    console.log(e);
     return false;
   }
 };
@@ -96,29 +116,38 @@ export const updateUser = async (
   email: string,
   username: string,
   description?: string,
-  image?: string
+  image?: File
 ) => {
-  const payload: Partial<IUpdateResponse> = {
-    email,
-    username,
-  };
-
-  if (description) {
-    payload.description = description;
+  const formData = new FormData();
+  if (email) {
+    formData.append("email", email);
   }
-
+  if (username) {
+    formData.append("username", username);
+  }
+  if (description) {
+    formData.append("description", description);
+  }
   if (image) {
-    payload.image = image;
+    formData.append("image", image as Blob);
   }
 
   await axios.put<IUpdateResponse>(
     `http://localhost:3000/user/${id}`,
-    payload,
+    formData,
     {
       headers: {
-        Authorization: `Bearer ${getAuthTokenByName("accessToken")}`,
+        ...getAuthHeaders().headers,
+        "Content-Type": "multipart/form-data",
       },
     }
   );
 };
-export default { register, login, logout, googleLogin, getUserDetails, updateUser };
+export default {
+  register,
+  login,
+  logout,
+  googleLogin,
+  getUserDetails,
+  updateUser,
+};

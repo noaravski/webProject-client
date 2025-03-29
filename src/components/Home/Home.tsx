@@ -6,6 +6,7 @@ import { getCommentsByPost } from "../../services/commentService";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IPostWithComments } from "../../services/postService";
+import { getUserProfilePic } from "../../services/commentService";
 
 const ScrollableCards = () => {
   const [cardsData, setCardsData] = useState<IPostWithComments[]>([]);
@@ -22,11 +23,15 @@ const ScrollableCards = () => {
 
       for (const post of posts) {
         const comments = await getCommentsByPost(post._id);
+
+        if (!post.profilePic.includes('https')) {
+          post.profilePic = "/" + post.userId + "/" + post.profilePic;
+        }
+        
         const postWithComments: IPostWithComments = {
           ...post,
           comments: comments,
         };
-
         postsWithComments.push(postWithComments);
       }
       postsWithComments.sort(
@@ -59,6 +64,8 @@ const ScrollableCards = () => {
             likes={card.likes.length}
             _id={card._id}
             createdAt={card.createdAt}
+            imageUrl={"/" + card.userId + "/" + card.imageUrl}
+            profilePic={card.profilePic}
           ></Post>
         ))}
       </div>

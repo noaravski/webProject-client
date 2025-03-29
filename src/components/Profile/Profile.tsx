@@ -48,7 +48,7 @@ const Profile: React.FC = () => {
   const handleCloseEdit = () => setIsEditOpen(false);
 
   const [cardsData, setCardsData] = useState<IPostWithComments[]>([]);
-  
+
   const fetchPosts = async () => {
     const posts = await getPostsByUser();
     const postsWithComments: IPostWithComments[] = [];
@@ -88,21 +88,36 @@ const Profile: React.FC = () => {
             <MDBCard className="mb-4">
               <MDBCardBody>
                 <MDBCardImage
-                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                  src={
+                    user?.profilePic?.includes("https")
+                      ? user?.profilePic
+                      : `http://localhost:3000/images/${(user?._id ?? "").replace(
+                          /\//g,
+                          ""
+                        )}/${(user?.profilePic ?? "").replace(/\//g, "")}`
+                  }
                   alt="avatar"
                   className="rounded-circle"
-                  style={{ width: "300px" }}
+                  style={{ width: "300px", height: "320px" }}
                   fluid
                 />
                 <div className="d-flex justify-content-center mb-2 mt-2">
                   <MDBBtn outline className="ms-1" onClick={handleOpenEdit}>
-                    Edit Profile
+                  Edit Profile
                   </MDBBtn>
                   <EditProfileModal
-                    open={isEditOpen}
-                    handleClose={handleCloseEdit}
-                    user={user}
-                    onProfileUpdated={handleProfileUpdated}
+                  open={isEditOpen}
+                  handleClose={handleCloseEdit}
+                  user={user}
+                  profilePicUrl={
+                    user?.profilePic?.includes("https")
+                    ? user?.profilePic
+                    : `http://localhost:3000/images/${(user?._id ?? "").replace(
+                      /\//g,
+                      ""
+                      )}/${(user?.profilePic ?? "").replace(/\//g, "")}`
+                  }
+                  onProfileUpdated={handleProfileUpdated}
                   />
                 </div>
                 <div className="mt-3 ">
@@ -190,7 +205,9 @@ const Profile: React.FC = () => {
                       comments={card.comments}
                       likes={card.likes.length}
                       _id={card._id}
+                      imageUrl={"/" + user?._id + "/" + card.imageUrl}
                       createdAt={card.createdAt}
+                      profilePic={"/" + user?._id + "/" + user?.profilePic}
                       onPostUpdated={handlePostUpdated}
                     ></Post>
                   ))}

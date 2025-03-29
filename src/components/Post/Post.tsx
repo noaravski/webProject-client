@@ -27,7 +27,10 @@ interface PostProps {
   createdAt: Date;
   likes: number;
   comments: ICommentResponse[];
+  imageUrl?: string;
   _id: string;
+  senderId: string;
+  profilePic?: string;
   edit?: boolean;
   canDelete?: boolean;
   onPostUpdated?: () => void;
@@ -40,6 +43,9 @@ export default function Post({
   comments: initialComments,
   _id,
   createdAt,
+  imageUrl,
+  profilePic,
+  senderId,
   edit = false,
   canDelete = false,
   onPostUpdated,
@@ -68,6 +74,7 @@ export default function Post({
       setPost(postData);
     }
   };
+
 
   const handlePostUpdated = () => {
     fetchPost();
@@ -100,7 +107,6 @@ export default function Post({
       if (onPostUpdated) {
         onPostUpdated();
       }
-      console.log("Post deleted successfully");
       setPost({ content: "", _id: "" });
       handleCloseDelete();
     } catch (error) {
@@ -151,7 +157,11 @@ export default function Post({
         >
           <Avatar
             size="sm"
-            src="https://i.pravatar.cc/30"
+            src={
+              profilePic?.includes("https")
+                ? profilePic
+                : `http://localhost:3000/images/${profilePic}`
+            }
             sx={{
               border: "2px solid",
               borderColor: "background.body",
@@ -191,11 +201,12 @@ export default function Post({
         )}
       </CardContent>
       <CardOverflow>
-        <AspectRatio>
+        <AspectRatio ratio="4/3">
           <img
-            src="https://picsum.photos/600/400?random=1"
+            src={`http://localhost:3000/images/${imageUrl}`}
             alt=""
             loading="lazy"
+            style={{ objectFit: "cover" }}
           />
         </AspectRatio>
       </CardOverflow>
