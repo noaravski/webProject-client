@@ -99,15 +99,17 @@ export default function AddPost() {
                 </div>
 
                 <MDBTextArea
-                  {...register("content", { required: true })}
-                  className="form-control"
-                  wrapperClass="mb-4"
-                  label="Description"
-                  id="formControlLg"
-                  size="lg"
-                  maxLength={720}
-                  placeholder="Enter your Description here..."
-                  value={textareaValue} // Bind the textarea value to the state
+                    {...register("content", { required: true })}
+                    className="form-control"
+                    wrapperClass="mb-4"
+                    label="Description"
+                    id="formControlLg"
+                    size="lg"
+                    maxLength={720}
+                    placeholder={`Enter your Description here...
+          Or get AI recommendation by entering movie name`}
+                    value={textareaValue} // Bind the textarea value to the state
+                    style={{ height: "150px" }} // Increase the height of the textarea
                   onChange={(e) => setTextareaValue(e.target.value)} // Update state on user input
                 >
                   <button
@@ -127,6 +129,17 @@ export default function AddPost() {
                       handleAiRequest();
                     }}
                     disabled={isLoading}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "#f0f0f0"; // Change background on hover
+                      e.currentTarget.setAttribute(
+                        "title",
+                        "Generate AI Recommendation"
+                      ); // Add hover text
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "transparent"; // Revert background on mouse leave
+                      e.currentTarget.removeAttribute("title"); // Remove hover text
+                    }}
                   >
                     {isLoading ? (
                       <Spinner
