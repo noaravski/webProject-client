@@ -15,7 +15,7 @@ import { createPost } from "../../services/postService";
 import { ICreatePost } from "../../interfaces/post";
 import AddImage from "../AddImage/AddImage";
 import { RiGeminiFill } from "react-icons/ri";
-import { Spinner } from "react-bootstrap"; // Import Spinner for loading animation
+import { Spinner } from "react-bootstrap"; 
 import { aiEnhanceRequest } from "../../services/aiService";
 
 const MDBTextArea = React.forwardRef<
@@ -33,8 +33,8 @@ export default function AddPost() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { register, handleSubmit, getValues } = useForm<ICreatePost>();
   const [image, setImage] = useState<File>();
-  const [isLoading, setIsLoading] = useState(false); // State to track button loading
-  const [textareaValue, setTextareaValue] = useState(""); // State for textarea value
+  const [isLoading, setIsLoading] = useState(false);
+  const [textareaValue, setTextareaValue] = useState(""); 
 
   const onSubmit = async (data: ICreatePost) => {
     const { content } = data;
@@ -56,7 +56,7 @@ export default function AddPost() {
   };
 
   const handleAiRequest = async () => {
-    const content = getValues("content"); // Get the current value of the textarea
+    const content = getValues("content");
     if (!content) {
       setErrorMessage("Please enter text before using AI suggestions.");
       return;
@@ -108,10 +108,10 @@ export default function AddPost() {
                     maxLength={720}
                     placeholder={`Enter your Description here...
 Or get AI recommendation by entering movie name`}
-                    value={textareaValue} // Bind the textarea value to the state
+                    value={textareaValue} 
                     onChange={(e) => {
-                      setTextareaValue(e.target.value); // Update state on user input
-                      setErrorMessage(null); // Clear error message on user input
+                      setTextareaValue(e.target.value); 
+                      setErrorMessage(null);
                     }}
                 >
                   <button
@@ -127,20 +127,20 @@ Or get AI recommendation by entering movie name`}
                       padding: "8px",
                     }}
                     onClick={(e) => {
-                      e.preventDefault(); // Prevent form submission
+                      e.preventDefault(); 
                       handleAiRequest();
                     }}
                     disabled={isLoading}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "#f0f0f0"; // Change background on hover
+                      e.currentTarget.style.background = "#f0f0f0";
                       e.currentTarget.setAttribute(
                         "title",
                         "Generate AI Recommendation"
-                      ); // Add hover text
+                      );
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "transparent"; // Revert background on mouse leave
-                      e.currentTarget.removeAttribute("title"); // Remove hover text
+                      e.currentTarget.style.background = "transparent"; 
+                      e.currentTarget.removeAttribute("title"); 
                     }}
                   >
                     {isLoading ? (
