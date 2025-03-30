@@ -15,7 +15,8 @@ export interface IPostWithComments {
   profilePic: string;
 }
 
-const backendUrl = import.meta.env.VITE_API_URL || "https://node94.cs.colman.ac.il:4000";
+const backendUrl =
+  import.meta.env.VITE_API_URL || "https://node94.cs.colman.ac.il:4000";
 
 export const getPosts = async () => {
   const response = await axios.get<IPostWithComments[]>(backendUrl + "/posts");
@@ -78,9 +79,14 @@ export const deletePost = async (_id: string) => {
 export const updatePost = async (postData: ICreatePost) => {
   try {
     const response = await axios.put<ICreatePost>(
-      backendUrl + `/post/${postData._id}`,
+      backendUrl + `/api/updatePost/${postData._id}`,
       postData,
-      getAuthHeaders()
+      {
+        headers: {
+          ...getAuthHeaders().headers,
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
     return response.data;
   } catch (e) {
