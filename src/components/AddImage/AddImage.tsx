@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import noPic from "../../assets/noImage.png";
-import handleUpload from "../../services/fileService";
 
 interface AddImageProps {
   onFileSelect: (file: File) => void;

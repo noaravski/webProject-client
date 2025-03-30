@@ -14,11 +14,13 @@ import "./Profile.css";
 import { getUserDetails } from "../../services/userService";
 import { IUser } from "../../interfaces/user";
 import { getPostsByUser, IPostWithComments } from "../../services/postService";
-import { getCommentsByPost } from "../../services/commentService";
+import { getCommentsByPost } from "../../services/CommentService";
 
 import EditProfileModal from "../EditProfile/EditProfile";
 import Navbar from "../Navbar/Navbar";
 import Post from "../Post/Post";
+
+const backendUrl = import.meta.env.VITE_API_URL || "https://node94.cs.colman.ac.il:4000";
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<IUser | null>(null);
@@ -91,7 +93,7 @@ const Profile: React.FC = () => {
                   src={
                     user?.profilePic?.includes("https")
                       ? user?.profilePic
-                      : `http://localhost:3000/images/${(user?._id ?? "").replace(
+                      : `${backendUrl}/images/${(user?._id ?? "").replace(
                           /\//g,
                           ""
                         )}/${(user?.profilePic ?? "").replace(/\//g, "")}`
@@ -103,21 +105,21 @@ const Profile: React.FC = () => {
                 />
                 <div className="d-flex justify-content-center mb-2 mt-2">
                   <MDBBtn outline className="ms-1" onClick={handleOpenEdit}>
-                  Edit Profile
+                    Edit Profile
                   </MDBBtn>
                   <EditProfileModal
-                  open={isEditOpen}
-                  handleClose={handleCloseEdit}
-                  user={user}
-                  profilePicUrl={
-                    user?.profilePic?.includes("https")
-                    ? user?.profilePic
-                    : `http://localhost:3000/images/${(user?._id ?? "").replace(
-                      /\//g,
-                      ""
-                      )}/${(user?.profilePic ?? "").replace(/\//g, "")}`
-                  }
-                  onProfileUpdated={handleProfileUpdated}
+                    open={isEditOpen}
+                    handleClose={handleCloseEdit}
+                    user={user}
+                    profilePicUrl={
+                      user?.profilePic?.includes("https")
+                        ? user?.profilePic
+                        : `${backendUrl}/images/${(user?._id ?? "").replace(
+                            /\//g,
+                            ""
+                          )}/${(user?.profilePic ?? "").replace(/\//g, "")}`
+                    }
+                    onProfileUpdated={handleProfileUpdated}
                   />
                 </div>
                 <div className="mt-3 ">
@@ -205,6 +207,7 @@ const Profile: React.FC = () => {
                       comments={card.comments}
                       likes={card.likes.length}
                       _id={card._id}
+                      senderId={card.userId}
                       imageUrl={"/" + user?._id + "/" + card.imageUrl}
                       createdAt={card.createdAt}
                       profilePic={"/" + user?._id + "/" + user?.profilePic}

@@ -9,16 +9,13 @@ import {
   MDBRow,
   MDBCard,
   MDBCardBody,
-  MDBCardImage,
   MDBBtn,
   MDBInput as OriginalMDBInput,
   MDBTextArea as OriginalMDBTextArea,
 } from "mdb-react-ui-kit";
 import { IUser } from "../../interfaces/user";
-import ImageUploader from "../../imageUploader/ImageUploader";
 import ProfilePic from "../ProfilePic/Profilepic";
 import { useState } from "react";
-import { getUserDetails } from "../../services/userService";
 import axios from "axios";
 interface EditProfileModalProps {
   open: boolean;
@@ -63,7 +60,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     formState: { errors },
   } = useForm<updatedUserData>({});
 
-  const [profilePic, setProfilePic] = useState<File | undefined>(null);
+  const [profilePic, setProfilePic] = useState<File | undefined>();
 
   const onSubmit = async (data: updatedUserData) => {
     const { email, username, description } = data;

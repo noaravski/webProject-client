@@ -28,7 +28,7 @@ export interface IUpdateResponse {
   image?: string;
 }
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
+const backendUrl = import.meta.env.VITE_API_URL || "https://node94.cs.colman.ac.il:4000";
 
 export const register = async (
   email: string,

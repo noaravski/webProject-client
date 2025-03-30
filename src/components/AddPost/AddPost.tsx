@@ -4,7 +4,6 @@ import {
   MDBRow,
   MDBCard,
   MDBCardBody,
-  MDBCardImage,
   MDBBtn,
   MDBTextArea as OriginalMDBTextArea,
 } from "mdb-react-ui-kit";
@@ -15,7 +14,7 @@ import { createPost } from "../../services/postService";
 import { ICreatePost } from "../../interfaces/post";
 import AddImage from "../AddImage/AddImage";
 import { RiGeminiFill } from "react-icons/ri";
-import { Spinner } from "react-bootstrap"; 
+import { Spinner } from "react-bootstrap";
 import { aiEnhanceRequest } from "../../services/aiService";
 
 const MDBTextArea = React.forwardRef<
@@ -31,10 +30,11 @@ const MDBTextArea = React.forwardRef<
 export default function AddPost() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { register, handleSubmit, getValues } = useForm<ICreatePost>();
+  const { register, handleSubmit, setValue, getValues } =
+    useForm<ICreatePost>();
   const [image, setImage] = useState<File>();
   const [isLoading, setIsLoading] = useState(false);
-  const [textareaValue, setTextareaValue] = useState(""); 
+  const [textareaValue, setTextareaValue] = useState("");
 
   const onSubmit = async (data: ICreatePost) => {
     const { content } = data;
@@ -66,6 +66,7 @@ export default function AddPost() {
     try {
       const aiResult = await aiEnhanceRequest(content);
       setTextareaValue(aiResult);
+      setValue("content", aiResult);
     } catch (error) {
       console.error("Error fetching AI response:", error);
       setErrorMessage("Failed to fetch AI suggestions. Please try again.");
@@ -99,20 +100,24 @@ export default function AddPost() {
                 </div>
 
                 <MDBTextArea
-                    {...register("content", { required: true })}
-                    className="form-control"
-                    wrapperClass="mb-4"
-                    label="Description"
-                    id="formControlLg"
-                    size="lg"
-                    maxLength={720}
-                    placeholder={`Enter your Description here...
+                  {...register("content", {
+                    required: true,
+                  })}
+                  className="form-control"
+                  wrapperClass="mb-4"
+                  label="Description"
+                  id="formControlLg"
+                  size="lg"
+                  maxLength={720}
+                  placeholder={`Enter your Description here...
 Or get AI recommendation by entering movie name`}
-                    value={textareaValue} 
-                    onChange={(e) => {
-                      setTextareaValue(e.target.value); 
-                      setErrorMessage(null);
-                    }}
+                  value={textareaValue}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setTextareaValue(value);
+                    setValue("content", value);
+                    setErrorMessage(null);
+                  }}
                 >
                   <button
                     className={`btn ${
@@ -127,7 +132,7 @@ Or get AI recommendation by entering movie name`}
                       padding: "8px",
                     }}
                     onClick={(e) => {
-                      e.preventDefault(); 
+                      e.preventDefault();
                       handleAiRequest();
                     }}
                     disabled={isLoading}
@@ -139,8 +144,8 @@ Or get AI recommendation by entering movie name`}
                       );
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "transparent"; 
-                      e.currentTarget.removeAttribute("title"); 
+                      e.currentTarget.style.background = "transparent";
+                      e.currentTarget.removeAttribute("title");
                     }}
                   >
                     {isLoading ? (

@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { ICommentResponse } from "./commentService";
+import { ICommentResponse } from "./CommentService";
 import { getAuthHeaders } from "./authClientService";
 import { ICreatePost } from "../interfaces/post";
 
@@ -10,12 +10,12 @@ export interface IPostWithComments {
   comments: ICommentResponse[];
   likes: string[];
   createdAt: Date;
-  imageUrl?:string;
-  userId:string;
-  profilePic:string;
+  imageUrl?: string;
+  userId: string;
+  profilePic: string;
 }
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
+const backendUrl = import.meta.env.VITE_API_URL || "https://node94.cs.colman.ac.il:4000";
 
 export const getPosts = async () => {
   const response = await axios.get<IPostWithComments[]>(backendUrl + "/posts");
@@ -45,7 +45,7 @@ export const createPost = async (postData: ICreatePost) => {
     formData.append("image", postData.image as Blob);
 
     const response = await axios.post<ICreatePost>(
-      backendUrl + "/post",
+      backendUrl + "/api/post",
       formData,
       {
         headers: {

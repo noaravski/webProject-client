@@ -1,4 +1,4 @@
-import { Profiler, useState } from "react";
+import { useState } from "react";
 import "./SignUp.css";
 import {
   MDBBtn,
@@ -20,7 +20,6 @@ import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import ProfilePic from "../ProfilePic/Profilepic";
-import handleUpload from "../../services/fileService";
 
 type RegisterData = {
   email: string;
@@ -32,7 +31,7 @@ type RegisterData = {
 function SignUp() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [profilePic, setProfilePic] = useState<File | undefined>(null);
+  const [profilePic, setProfilePic] = useState<File | undefined>();
   const { register, handleSubmit } = useForm<RegisterData>();
 
   const googleResponseMessage = async (

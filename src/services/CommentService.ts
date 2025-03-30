@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getAuthHeaders } from "./authClientService";
+
 export interface ICommentResponse {
   _id: string;
   content: string;
@@ -7,26 +8,15 @@ export interface ICommentResponse {
   sender: string;
   senderId: string;
   createdAt: string;
-  profilePic:string;
+  profilePic: string;
 }
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
-interface IUserDetails {
-  _id: string;
-  name: string;
-  email: string;
-}
-
-interface IComment {
-  sender: string;
-  // Add other comment fields as needed
-}
+const backendUrl = import.meta.env.VITE_API_URL || "https://node94.cs.colman.ac.il:4000";
 
 export const getUserProfilePic = async (senderId: string): Promise<string> => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/user/profilePic/${senderId}`
+      `${backendUrl}/user/profilePic/${senderId}`
     );
     return `${response.data.id}/${response.data.profilePic}`;
   } catch (error) {
@@ -35,7 +25,7 @@ export const getUserProfilePic = async (senderId: string): Promise<string> => {
   }
 };
 
-export const getCommentsByPost = async (postId) => {
+export const getCommentsByPost = async (postId: string) => {
   const response = await axios.get<ICommentResponse[]>(
     backendUrl + "/comments/" + postId
   );
