@@ -92,90 +92,90 @@ export default function AddPost() {
           <MDBRow className="justify-content-center align-items-center h-100">
             <MDBCard style={{ borderRadius: "15px" }}>
               <MDBCardBody
-                className="text-center"
-                style={{ width: "500px", height: "500px" }}
+          className="text-center"
+          style={{ width: "500px", height: "600px" }} // Increased height to make the card longer
               >
-                <div className="mt-3 mb-4">
-                  <AddImage onFileSelect={(file) => setImage(file)} />
-                </div>
+          <div className="mt-3 mb-4">
+            <AddImage onFileSelect={(file) => setImage(file)} />
+          </div>
 
-                <MDBTextArea
-                  {...register("content", {
-                    required: true,
-                  })}
-                  className="form-control"
-                  wrapperClass="mb-4"
-                  label="Description"
-                  id="formControlLg"
-                  size="lg"
-                  maxLength={720}
-                  placeholder={`Enter your Description here...
-Or get AI recommendation by entering movie name`}
-                  value={textareaValue}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setTextareaValue(value);
-                    setValue("content", value);
-                    setErrorMessage(null);
-                  }}
-                >
-                  <button
-                    className={`btn ${
-                      isLoading ? "btn-secondary" : "btn-light"
-                    }`}
-                    style={{
-                      position: "absolute",
-                      top: "10px",
-                      right: "10px",
-                      border: "none",
-                      background: "transparent",
-                      padding: "8px",
-                    }}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleAiRequest();
-                    }}
-                    disabled={isLoading}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "#f0f0f0";
-                      e.currentTarget.setAttribute(
-                        "title",
-                        "Generate AI Recommendation"
-                      );
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "transparent";
-                      e.currentTarget.removeAttribute("title");
-                    }}
-                  >
-                    {isLoading ? (
-                      <Spinner
-                        animation="border"
-                        size="sm"
-                        role="status"
-                        aria-hidden="true"
-                        style={{ color: "blue" }}
-                      />
-                    ) : (
-                      <RiGeminiFill size={20} color="blue" />
-                    )}
-                  </button>
-                  <div
-                    style={{ position: "absolute", top: "10px", right: "10px" }}
-                  ></div>
-                </MDBTextArea>
-                {errorMessage && (
-                  <div className="text-danger mb-3">{errorMessage}</div>
-                )}
-                <MDBBtn
-                  type="submit"
-                  outline
-                  rounded
-                  size="lg"
-                  className="mt-4"
-                >
-                  Upload Movie Suggestion
-                </MDBBtn>
+          <MDBTextArea
+            {...register("content", {
+              required: true,
+            })}
+            className="form-control"
+            wrapperClass="mb-4"
+            label="Description"
+            id="formControlLg"
+            size="lg"
+            maxLength={720}
+            placeholder={`Enter your Description here...
+      Or get AI recommendation by entering movie name`}
+            value={textareaValue}
+            onChange={(e) => {
+              const value = e.target.value;
+              setTextareaValue(value);
+              setValue("content", value);
+              setErrorMessage(null);
+            }}
+          >
+            <button
+              className={`btn ${
+                isLoading ? "btn-secondary" : "btn-light"
+              }`}
+              style={{
+                position: "absolute",
+                top: "10px",
+                right: "10px",
+                border: "none",
+                background: "transparent",
+                padding: "8px",
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                handleAiRequest();
+              }}
+              disabled={isLoading}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#f0f0f0";
+                e.currentTarget.setAttribute(
+            "title",
+            "Generate AI Recommendation"
+                );
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.removeAttribute("title");
+              }}
+            >
+              {isLoading ? (
+                <Spinner
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+            style={{ color: "blue" }}
+                />
+              ) : (
+                <RiGeminiFill size={20} color="blue" />
+              )}
+            </button>
+            <div
+              style={{ position: "absolute", top: "10px", right: "10px" }}
+            ></div>
+          </MDBTextArea>
+          {errorMessage && (
+            <div className="text-danger mb-3">{errorMessage}</div>
+          )}
+          <MDBBtn
+            type="submit"
+            outline
+            rounded
+            size="lg"
+            className="mt-4"
+          >
+            Upload Movie Suggestion
+          </MDBBtn>
               </MDBCardBody>
             </MDBCard>
           </MDBRow>

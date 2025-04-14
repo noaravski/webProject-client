@@ -201,6 +201,7 @@ export default function Post({
               open={isEditOpen}
               handleClose={handleCloseEdit}
               post={post}
+              imageUrl={imageUrl}
               onPostUpdated={handlePostUpdated}
             />
           </Box>

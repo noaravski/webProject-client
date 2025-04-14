@@ -21,6 +21,7 @@ interface EditPostProps {
   open: boolean;
   handleClose: () => void;
   post: ICreatePost | null;
+  imageUrl?: string;
   onPostUpdated: () => void;
 }
 
@@ -38,6 +39,7 @@ const EditPost: React.FC<EditPostProps> = ({
   open,
   handleClose,
   post,
+  imageUrl,
   onPostUpdated,
 }) => {
   const { register, handleSubmit } = useForm<ICreatePost>({});
@@ -45,7 +47,7 @@ const EditPost: React.FC<EditPostProps> = ({
 
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const navigate = useNavigate();
-
+  console.log(imageUrl);
   const onSubmit = async (data: ICreatePost) => {
     const { content } = data;
     try {
@@ -92,7 +94,10 @@ const EditPost: React.FC<EditPostProps> = ({
                   <MDBCardBody className="text-center">
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <div className="mt-3 mb-4">
-                        <AddImage onFileSelect={(file) => setImage(file)} />
+                        <AddImage
+                          onFileSelect={(file) => setImage(file)}
+                          currentImage={imageUrl}
+                        />
                       </div>
 
                       <MDBTextArea
