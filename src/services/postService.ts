@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { ICommentResponse } from "./commentService";
+import { ICommentResponse } from "./CommentService";
 import { getAuthHeaders } from "./authClientService";
 import { ICreatePost } from "../interfaces/post";
 
@@ -10,21 +10,22 @@ export interface IPostWithComments {
   comments: ICommentResponse[];
   likes: string[];
   createdAt: Date;
-  imageUrl?:string;
-  userId:string;
-  profilePic:string;
+  imageUrl?: string;
+  userId: string;
+  profilePic: string;
 }
 
+const backendUrl =
+  import.meta.env.VITE_API_URL || "https://node94.cs.colman.ac.il:4000";
+
 export const getPosts = async () => {
-  const response = await axios.get<IPostWithComments[]>(
-    "http://localhost:3000/posts"
-  );
+  const response = await axios.get<IPostWithComments[]>(backendUrl + "/posts");
   return response.data;
 };
 
 export const getPostsByUser = async () => {
   const response = await axios.get<IPostWithComments[]>(
-    `http://localhost:3000/user/posts`,
+    backendUrl + `/user/posts`,
     getAuthHeaders()
   );
   return response.data;
@@ -32,12 +33,11 @@ export const getPostsByUser = async () => {
 
 export const getPostById = async (_id: string) => {
   const response = await axios.get<ICreatePost>(
-    `http://localhost:3000/post/${_id}`,
+    backendUrl + `/post/${_id}`,
     getAuthHeaders()
   );
   return response.data;
 };
-
 
 export const createPost = async (postData: ICreatePost) => {
   try {
@@ -46,7 +46,7 @@ export const createPost = async (postData: ICreatePost) => {
     formData.append("image", postData.image as Blob);
 
     const response = await axios.post<ICreatePost>(
-      "http://localhost:3000/api/post",
+      backendUrl + "/api/post",
       formData,
       {
         headers: {
@@ -66,7 +66,7 @@ export const createPost = async (postData: ICreatePost) => {
 export const deletePost = async (_id: string) => {
   try {
     const response = await axios.delete<ICreatePost>(
-      `http://localhost:3000/post/${_id}`,
+      backendUrl + `/post/${_id}`,
       getAuthHeaders()
     );
     return response.data;
@@ -79,9 +79,14 @@ export const deletePost = async (_id: string) => {
 export const updatePost = async (postData: ICreatePost) => {
   try {
     const response = await axios.put<ICreatePost>(
-      `http://localhost:3000/post/${postData._id}`,
+      backendUrl + `/api/updatePost/${postData._id}`,
       postData,
-      getAuthHeaders()
+      {
+        headers: {
+          ...getAuthHeaders().headers,
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
     return response.data;
   } catch (e) {
@@ -91,24 +96,16 @@ export const updatePost = async (postData: ICreatePost) => {
 };
 
 export const addLike = async (postId: string) => {
-  await axios.put(
-    `http://localhost:3000/post/like/${postId}`,
-    {},
-    getAuthHeaders()
-  );
+  await axios.put(backendUrl + `/post/like/${postId}`, {}, getAuthHeaders());
 };
 
 export const removeLike = async (postId: string) => {
-  await axios.put(
-    `http://localhost:3000/post/unlike/${postId}`,
-    {},
-    getAuthHeaders()
-  );
+  await axios.put(backendUrl + `/post/unlike/${postId}`, {}, getAuthHeaders());
 };
 
 export const isLiked = async (postId: string) => {
   const response = await axios.get(
-    `http://localhost:3000/post/isliked/${postId}`,
+    backendUrl + `/post/isliked/${postId}`,
     getAuthHeaders()
   );
 

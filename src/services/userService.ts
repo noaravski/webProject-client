@@ -5,8 +5,6 @@ import {
   removeAuthTokens,
 } from "../utils/localStorage";
 import { getAuthHeaders } from "./authClientService";
-import ProfilePic from "../components/ProfilePic/Profilepic";
-import getUserProfilePic from "./fileService";
 
 export { CanceledError };
 
@@ -30,6 +28,8 @@ export interface IUpdateResponse {
   image?: string;
 }
 
+const backendUrl = import.meta.env.VITE_API_URL || "https://node94.cs.colman.ac.il:4000";
+
 export const register = async (
   email: string,
   username: string,
@@ -43,7 +43,7 @@ export const register = async (
   formData.append("image", profilePic as Blob);
 
   const response = await axios.post<IRegisterResponse>(
-    "http://localhost:3000/user",
+    backendUrl + "/user",
     formData,
     {
       headers: {
@@ -60,16 +60,18 @@ export const register = async (
 };
 
 export const getUserDetails = async () => {
-  const response = await axios.get("http://localhost:3000/user/details", {
-    ...getAuthHeaders(),
-  });
+  const response = await axios.get(
+    backendUrl + "/user/details",
+    getAuthHeaders()
+  );
+
   return response.data;
 };
 
 export const login = async (email: string, password: string) => {
   try {
     const response = await axios.post<ILoginResponse>(
-      "http://localhost:3000/user/login",
+      backendUrl + "/user/login",
       {
         email,
         password,
@@ -90,7 +92,7 @@ export const login = async (email: string, password: string) => {
 
 export const logout = async () => {
   await axios.post<IRegisterResponse>(
-    "http://localhost:3000/user/logout",
+    backendUrl + "/user/logout",
     {},
     getAuthHeaders()
   );
@@ -99,12 +101,9 @@ export const logout = async () => {
 
 export const googleLogin = async (credential?: string) => {
   const tokens = (
-    await axios.post<ILoginResponse>(
-      "http://localhost:3000/user/login/google",
-      {
-        credential,
-      }
-    )
+    await axios.post<ILoginResponse>(backendUrl + "/user/login/google", {
+      credential,
+    })
   ).data;
 
   updateTokens(tokens);
@@ -132,16 +131,12 @@ export const updateUser = async (
     formData.append("image", image as Blob);
   }
 
-  await axios.put<IUpdateResponse>(
-    `http://localhost:3000/user/${id}`,
-    formData,
-    {
-      headers: {
-        ...getAuthHeaders().headers,
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  await axios.put<IUpdateResponse>(backendUrl + `/user/${id}`, formData, {
+    headers: {
+      ...getAuthHeaders().headers,
+      Authorization: `Bearer ${getAuthTokenByName("accessToken")}`,
+    },
+  });
 };
 export default {
   register,

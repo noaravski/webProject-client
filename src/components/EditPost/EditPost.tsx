@@ -9,17 +9,19 @@ import {
   MDBRow,
   MDBCard,
   MDBCardBody,
-  MDBCardImage,
   MDBBtn,
   MDBTextArea as OriginalMDBTextArea,
 } from "mdb-react-ui-kit";
+import AddImage from "../AddImage/AddImage";
 import { updatePost } from "../../services/postService";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 interface EditPostProps {
   open: boolean;
   handleClose: () => void;
   post: ICreatePost | null;
+  imageUrl?: string;
   onPostUpdated: () => void;
 }
 
@@ -37,21 +39,21 @@ const EditPost: React.FC<EditPostProps> = ({
   open,
   handleClose,
   post,
+  imageUrl,
   onPostUpdated,
 }) => {
-  const {
-    register,
-    handleSubmit,
-  } = useForm<ICreatePost>({});
+  const { register, handleSubmit } = useForm<ICreatePost>({});
+  const [image, setImage] = useState<File>();
 
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const navigate = useNavigate();
-
+  console.log(imageUrl);
   const onSubmit = async (data: ICreatePost) => {
     const { content } = data;
     try {
       const postData: ICreatePost = {
         content: content,
+        image: image,
         _id: post?._id || "",
       };
       const updatedPost = await updatePost(postData);
@@ -92,13 +94,12 @@ const EditPost: React.FC<EditPostProps> = ({
                   <MDBCardBody className="text-center">
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <div className="mt-3 mb-4">
-                        <MDBCardImage
-                          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
-                          className="rounded-circle"
-                          fluid
-                          style={{ width: "200px" }}
+                        <AddImage
+                          onFileSelect={(file) => setImage(file)}
+                          currentImage={imageUrl}
                         />
                       </div>
+
                       <MDBTextArea
                         {...register("content", { required: true })}
                         className="form-control"

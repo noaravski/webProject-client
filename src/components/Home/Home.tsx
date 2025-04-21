@@ -2,11 +2,10 @@ import "./Home.css";
 import Navbar from "../Navbar/Navbar";
 import Post from "../Post/Post";
 import { getPosts } from "../../services/postService";
-import { getCommentsByPost } from "../../services/commentService";
+import { getCommentsByPost } from "../../services/CommentService";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IPostWithComments } from "../../services/postService";
-import { getUserProfilePic } from "../../services/commentService";
 
 const ScrollableCards = () => {
   const [cardsData, setCardsData] = useState<IPostWithComments[]>([]);
@@ -66,6 +65,7 @@ const ScrollableCards = () => {
             createdAt={card.createdAt}
             imageUrl={"/" + card.userId + "/" + card.imageUrl}
             profilePic={card.profilePic}
+            senderId={card.userId}
           ></Post>
         ))}
       </div>

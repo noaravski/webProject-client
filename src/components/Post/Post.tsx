@@ -13,13 +13,18 @@ import Typography from "@mui/joy/Typography";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { ICommentResponse, createComment } from "../../services/commentService";
+import { ICommentResponse, createComment } from "../../services/CommentService";
 import CommentsModal from "../../modals/commentsModal";
 import Likes from "../../buttons/Like";
 import EditPost from "../EditPost/EditPost";
 import { getPostById, deletePost } from "../../services/postService";
 import { ICreatePost } from "../../interfaces/post";
 import ConfirmDeletion from "../ConfirmDeletion/ConfirmDeletion";
+
+const backendUrl =
+  import.meta.env.VITE_API_URL || "https://node94.cs.colman.ac.il:4000";
+
+console.log(backendUrl);
 
 interface PostProps {
   username: string;
@@ -45,7 +50,6 @@ export default function Post({
   createdAt,
   imageUrl,
   profilePic,
-  senderId,
   edit = false,
   canDelete = false,
   onPostUpdated,
@@ -74,7 +78,6 @@ export default function Post({
       setPost(postData);
     }
   };
-
 
   const handlePostUpdated = () => {
     fetchPost();
@@ -118,9 +121,12 @@ export default function Post({
     const now = new Date();
     const diff = now.getTime() - new Date(createdAt).getTime();
     const diffInHours = Math.floor(diff / (1000 * 60 * 60));
+    const diffInMinutes = Math.floor(diff / (1000 * 60));
     const diffInDays = Math.floor(diffInHours / 24);
 
-    if (diffInHours < 1) {
+    if (diffInMinutes < 1) {
+      return "Just Now";
+    } else if (diffInHours < 1) {
       return `${Math.floor(diff / (1000 * 60))} minutes ago`;
     } else if (diffInDays > 0) {
       return `${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`;
@@ -160,7 +166,7 @@ export default function Post({
             src={
               profilePic?.includes("https")
                 ? profilePic
-                : `http://localhost:3000/images/${profilePic}`
+                : `${backendUrl}/images/${profilePic}`
             }
             sx={{
               border: "2px solid",
@@ -195,6 +201,7 @@ export default function Post({
               open={isEditOpen}
               handleClose={handleCloseEdit}
               post={post}
+              imageUrl={imageUrl}
               onPostUpdated={handlePostUpdated}
             />
           </Box>
@@ -203,7 +210,7 @@ export default function Post({
       <CardOverflow>
         <AspectRatio ratio="4/3">
           <img
-            src={`http://localhost:3000/images/${imageUrl}`}
+            src={`${backendUrl}/images/${imageUrl}`}
             alt=""
             loading="lazy"
             style={{ objectFit: "cover" }}

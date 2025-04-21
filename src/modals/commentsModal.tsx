@@ -4,11 +4,14 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
-import { ICommentResponse } from "../services/commentService";
+import {
+  ICommentResponse,
+  getUserProfilePic,
+} from "../services/CommentService";
 import Avatar from "@mui/joy/Avatar";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { getUserProfilePic } from "../services/commentService";
+
+const backendUrl = import.meta.env.VITE_API_URL || "https://node94.cs.colman.ac.il:4000";
 
 const style = {
   position: "absolute",
@@ -54,7 +57,7 @@ const CommentsModal: React.FC<CommentsModalProps> = ({
     fetchUserDetails();
   }, [comments]);
 
-  const getTimeAgo = (createdAt) => {
+  const getTimeAgo = (createdAt: string) => {
     const now = new Date();
     const diff = now.getTime() - new Date(createdAt).getTime();
     const diffInHours = Math.floor(diff / (1000 * 60 * 60));
@@ -96,33 +99,34 @@ const CommentsModal: React.FC<CommentsModalProps> = ({
             </Typography>
             <div className="divider d-flex align-items-center mb-4 mt-2"></div>
             {sortedComments.map((comment) => (
-                <Box
+              <Box
                 key={comment._id}
                 sx={{ mt: 2, display: "flex", alignItems: "center" }}
-                >
+              >
                 <Avatar
                   size="sm"
-                  src={`http://localhost:3000/images/${
-                  userDetails[comment.sender]?.profilePic || "defaultProfilePic.jpg"
+                  src={`${backendUrl}/images/${
+                    userDetails[comment.sender]?.profilePic ||
+                    "defaultProfilePic.jpg"
                   }`}
                   sx={{
-                  border: "2px solid",
-                  borderColor: "background.body",
-                  mr: 2,
+                    border: "2px solid",
+                    borderColor: "background.body",
+                    mr: 2,
                   }}
                 />
                 <Box>
                   <Typography variant="body2" component="p">
-                  <span style={{ fontWeight: "bold" }}>
-                    {comment.sender}:
-                  </span>{" "}
-                  {comment.content}
+                    <span style={{ fontWeight: "bold" }}>
+                      {comment.sender}:
+                    </span>{" "}
+                    {comment.content}
                   </Typography>
                   <Typography variant="caption" component="p">
-                  {getTimeAgo(comment.createdAt)}
+                    {getTimeAgo(comment.createdAt)}
                   </Typography>
                 </Box>
-                </Box>
+              </Box>
             ))}
           </Box>
         </Fade>
