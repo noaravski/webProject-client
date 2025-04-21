@@ -25,13 +25,12 @@ type RegisterData = {
   email: string;
   username: string;
   password: string;
-  profilePic?: File;
 };
 
 function SignUp() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [profilePic, setProfilePic] = useState<File | undefined>();
+  const [profilePic, setProfilePic] = useState<File | null>(null); // Allow null for no file
   const { register, handleSubmit } = useForm<RegisterData>();
 
   const googleResponseMessage = async (
@@ -53,8 +52,12 @@ function SignUp() {
 
   const onSubmit = async (data: RegisterData) => {
     try {
-      
-      if (profilePic && profilePic.size > 5 * 1024 * 1024) {
+      // Validate profile picture
+      if (!profilePic) {
+        setErrorMessage("Please upload a profile picture.");
+        return;
+      }
+      if (profilePic.size > 5 * 1024 * 1024) {
         setErrorMessage("Profile picture is too large. Maximum size is 5MB.");
         return;
       }

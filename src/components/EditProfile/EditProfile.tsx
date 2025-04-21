@@ -119,7 +119,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <div className="mt-3 mb-4">
                         <ProfilePic
-                          onFileSelect={(file) => setProfilePic(file)}
+                          onFileSelect={(file) => file && setProfilePic(file)}
                           defaultImage={profilePicUrl}
                         />
                       </div>
